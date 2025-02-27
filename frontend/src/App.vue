@@ -1,16 +1,20 @@
 <template>
-    <NavBar />
     <div id="app">
-        <h1>Lista de Tarefas</h1>
-        <TaskList />
+        <NavBar />
+
+        <!-- Aqui as páginas serão carregadas -->
+        <router-view />
+
+        <footer>
+            <p>© 2025 Meu App</p>
+        </footer>
     </div>
 </template>
 
 <script>
-import TaskList from './components/TaskList.vue';
 import NavBar from './components/NavBar.vue'
 export default {
-    components: { TaskList, NavBar }
+    components: { NavBar }
 };
 </script>
 
@@ -18,6 +22,10 @@ export default {
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    margin: 20px;
 }
+
+nav a {
+    margin-right: 10px;
+}
+
 </style>
