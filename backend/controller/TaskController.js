@@ -1,5 +1,18 @@
-import { getTasks } from "../models/Task.js"
+import { User, getTasks } from "../models/Models.js"
+import bcrypt from 'bcryptjs';
 
+export async function createUser(req, res) {
+    const { name, email, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ name, email, hashedPassword });
+        await newUser.save();
+
+        res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao cadastrar usuário", error });
+    }
+}
 export async function createTask(req, res) {
     try {
         const task = new Task(req.body);

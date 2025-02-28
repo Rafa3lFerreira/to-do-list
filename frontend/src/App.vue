@@ -1,10 +1,12 @@
 <template>
     <div id="app">
         <NavBar />
-
-        <!-- Aqui as páginas serão carregadas -->
-        <router-view />
-
+        <main>
+            <p>
+                <strong>Current route path:</strong> {{ $route.fullPath }}
+            </p>
+            <RouterView />
+        </main>
         <footer>
             <p>© 2025 Meu App</p>
         </footer>
@@ -12,6 +14,7 @@
 </template>
 
 <script>
+import { RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue'
 export default {
     components: { NavBar }
@@ -27,5 +30,4 @@ body {
 nav a {
     margin-right: 10px;
 }
-
 </style>

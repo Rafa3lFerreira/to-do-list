@@ -2,9 +2,8 @@
   <nav class="navbar">
     <div class="logo">Minha Logo</div>
     <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Sobre</a></li>
-      <li><a href="#">Contato</a></li>
+      <RouterLink to='/register'>Home</RouterLink>
+      <RouterLink to='/crud'>Sobre</RouterLink>
     </ul>
   </nav>
 </template>
@@ -18,28 +17,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #ffffff;
-  color: rgb(0, 0, 0);
+  color: #202123;
   width: 100%;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .nav-links {
-  list-style: none;
-  display: flex;
-  gap: 15px;
-}
-
-.nav-links li a {
   color: white;
   text-decoration: none;
 }
 
-.nav-links li a:hover {
+.nav-links :hover {
   text-decoration: underline;
 }
 </style>

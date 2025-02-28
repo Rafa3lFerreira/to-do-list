@@ -5,5 +5,5 @@ const app = express();
 routes(app);
 
 app.listen(5000, () => {
-    console.log(`Servidor rodando na porta ${PORT}`)
+    console.log(`Servidor rodando na porta 5000`)
 });
