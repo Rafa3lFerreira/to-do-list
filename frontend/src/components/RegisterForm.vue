@@ -28,7 +28,9 @@ const register = async () => {
 
     message.value = response.data.message;
   } catch (error) {
-    message.value = error.response?.data?.message || "Erro ao cadastrar.";
+    console.error("Erro ao registrar:", error.response || error);
+    message.value = error.response?.data?.message || "Erro desconhecido ao cadastrar.";
   }
+
 };
 </script>

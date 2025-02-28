@@ -1,33 +1,27 @@
-import conectarAoBanco from "../config/db.js";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import conectarAoBanco from "../config/db.js";
+
 dotenv.config();
 
-const con = await conectarAoBanco(process.env.STRING_CON);
-
-const TaskSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    completed: { type: Boolean, default: false }
-});
-
-const Task = mongoose.model("Task", TaskSchema);
+await conectarAoBanco(process.env.STRING_CON);
 
 const userSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    password: String
-})
+    password: {
+        type: String,
+        required: true
+    }
+});
 
 const User = mongoose.model('User', userSchema);
 
-
-export async function getTasks() {
-    const db = con.db("to-do-list");
-    const colecao = db.collection("lista-fazer");
-    return colecao.find().toArray();
-}
-
-export { Task, User };
+export default User;
