@@ -1,17 +1,13 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-export default async function conectarAoBanco(stringConexao){
-    let mongoClient;
+export default async function conectarAoBanco(stringConexao) {
+    try {
+        console.log("Se conectando ao MongoDB...");
+        await mongoose.connect(stringConexao);
 
-    try{
-        mongoClient = new MongoClient(stringConexao);
-        console.log("Se conectando ao cluster");
-        await mongoClient.connect();
         console.log("Conectado ao MongoDB com sucesso");
-
-        return mongoClient;
     } catch (erro) {
-        console.log("Falha na conexão com o banco!", erro);
-        process.exit();
+        console.error("Falha na conexão com o banco!", erro);
+        process.exit(1);
     }
 }

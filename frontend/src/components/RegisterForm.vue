@@ -24,6 +24,11 @@ const register = async () => {
       name: name.value,
       email: email.value,
       password: password.value
+    }, {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
     });
 
     message.value = response.data.message;
