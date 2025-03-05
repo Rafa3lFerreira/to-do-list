@@ -5,7 +5,7 @@ import RegisterView from '../views/RegisterView.vue';
 import CrudView from '../views/CrudView.vue';
 
 const routes = [
-  { path: '/login', component: LoginView },
+  { path: '/', component: LoginView },
   { path: '/register', component: RegisterView },
   { path: '/crud', component: CrudView },
 ];

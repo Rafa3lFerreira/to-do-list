@@ -1,6 +1,9 @@
 <template>
-  
+    <div class="login-container">
+        <LoginForm />
+    </div>
 </template>
 
-<script>
+<script setup>
+import LoginForm from '../components/loginForm.vue';
 </script>
