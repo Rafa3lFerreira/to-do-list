@@ -1,30 +1,32 @@
 <template>
     <div id="app">
-        <NavBar />
-        <main>
+        <sideBar />
+        <div id="content">
             <p>
                 <strong>Current route path:</strong> {{ $route.fullPath }}
             </p>
             <RouterView />
-        </main>
-        <footer>
-            <p>© 2025 Meu App</p>
-        </footer>
+            
+            <footerComp />
+        </div>
     </div>
 </template>
 
+
 <script>
-import { RouterView } from 'vue-router';
-import NavBar from './components/NavBar.vue'
+import sideBar from './components/SideBar.vue'
+import footerComp from './components/Footer.vue'
 export default {
-    components: { NavBar }
+    components: { sideBar, footerComp }
 };
 </script>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
+#content {
+    width: 100%;
+    padding: 20px;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 nav a {

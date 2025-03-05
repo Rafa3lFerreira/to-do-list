@@ -1,64 +1,60 @@
 <template>
-    <div class="sidebar" id="sidebar">
-        <h2>Menu</h2>
-        <ul>
-            <li>Home</li>
-            <li>Sobre</li>
-            <li>Serviços</li>
-            <li>Contato</li>
-        </ul>
-    </div>
-    <button class="toggle-btn" id="toggleBtn">☰</button>
+  <div class="sidebar">
+    <RouterLink to="/">
+      <div class="item">
+        <font-awesome-icon :icon="['fas', 'house']" />
+      </div>
+    </RouterLink>
+    <RouterLink to="/register">
+      <div class="item">
+        <font-awesome-icon :icon="['fas', 'registered']" />
+      </div>
+    </RouterLink>
+    <RouterLink to="/crud">
+      <div class="item">
+        <font-awesome-icon :icon="['fas', 'user']" />
+      </div>
+    </RouterLink>
+  </div>
 </template>
-<script>
-const sidebar = document.getElementById("sidebar");
-const toggleBtn = document.getElementById("toggleBtn");
 
-toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("active");
-});
+<script setup>
 </script>
-<style>
+
+<style scoped>
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    background-color: #333;
-    color: white;
-    padding: 20px;
-    position: fixed;
-    left: -250px;
-    transition: left 0.3s ease;
+  width: 120px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  border-radius: 4%;
+  box-shadow: 0 2px 3px 0 rgba(48, 48, 48, .30), 0 6px 10px 4px rgba(48, 48, 48, .15);
+
 }
 
-.sidebar.active {
-    left: 0;
+.sidebar .item {
+  width: 60px;
+  height: 60px;
+  background: #555;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  transition: transform 0.3s ease, background 0.3s ease;
+  cursor: pointer;
 }
 
-.toggle-btn {
-    position: absolute;
-    left: 250px;
-    top: 20px;
-    cursor: pointer;
-    background-color: #ff9900;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    color: white;
+.sidebar .item:hover {
+  transform: scale(1.1);
+  background: #777;
 }
 
-.sidebar ul {
-    list-style: none;
-    margin-top: 20px;
-}
-
-.sidebar ul li {
-    padding: 10px 0;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.sidebar ul li:hover {
-    background: rgba(255, 255, 255, 0.2);
+.sidebar .item i {
+  color: white;
+  font-size: 24px;
 }
 </style>
