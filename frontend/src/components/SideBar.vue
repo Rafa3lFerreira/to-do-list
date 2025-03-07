@@ -6,7 +6,7 @@
         <span class="tooltip">Home</span>
       </div>
     </RouterLink>
-    <RouterLink to="/register">
+    <RouterLink to="/dev">
       <div class="item">
         <font-awesome-icon :icon="['fas', 'registered']" />
         <span class="tooltip">User register</span>

@@ -14,6 +14,9 @@
                 <button type="submit" class="login-button">Entrar</button>
             </form>
             <p v-if="message">{{ message }}</p>
+            <div class="options">
+                Não possui uma conta? <RouterLink to="/register">Registre-se</RouterLink>
+            </div>
         </div>
     </div>
 </template>
@@ -21,7 +24,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
@@ -37,6 +40,11 @@ const login = async () => {
             email: email.value,
             password: password.value
         });
+        const { token, name } = response.data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("usuario", name);
+
         message.value = response.data.message;
         setTimeout(() => {
             router.replace('/home')
@@ -113,5 +121,23 @@ const login = async () => {
 .login-button:hover {
     background: #777;
     transform: scale(1.05);
+}
+
+.options {
+    display: flex;
+    justify-content: start;
+    font-size: 12px;
+    padding: 10px 0 10px 0;
+}
+
+.options a {
+    padding-left: 2px;
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.options a:hover {
+    color: #000;
 }
 </style>

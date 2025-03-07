@@ -14,6 +14,10 @@ import { faHome, faList, faRegistered, faUser } from '@fortawesome/free-solid-sv
 /* add icons to the library */
 library.add(faHome, faRegistered, faUser, faList)
 
+export function getUsuario() {
+    return localStorage.getItem("usuario") || "Usuário";
+}
+
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
     .use(router)

@@ -1,7 +1,5 @@
 <template>
-    <div class="crud-container">
-        <HomeView />
-    </div>
+    <HomeView />
 </template>
 
 <script setup>

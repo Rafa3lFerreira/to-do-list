@@ -1,9 +1,15 @@
 <template>
-    <h1>Bem vindo</h1>
+    <div>
+        <h1>Bem vindo, {{ getUsuario() }}</h1>
+    </div>
 </template>
 
-<script>
-
+<script setup>
+import { getUsuario } from '../main';
 </script>
 
-<style scoped></style>
+<style scoped>
+.home-container {
+    background: #f5f5f5;
+}
+</style>

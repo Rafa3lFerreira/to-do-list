@@ -1,30 +1,26 @@
 <template>
     <div id="app">
-        <sideBar v-if="showSideBar" />
-        <div class="main">
-            <div id="content">
-                <RouterView />
-            </div>
+        <sideBar v-if="!isLoginOrRegister" />
+        <div :class="isLoginOrRegister ? 'main' : 'main content'">
+            <RouterView />
         </div>
     </div>
 </template>
 
 <script>
 import sideBar from './components/SideBar.vue'
-import footerComp from './components/Footer.vue'
-import NavBar from './components/NavBar.vue'
+
 export default {
     components: { sideBar },
     computed: {
-        // Exemplo: esconde a sidebar na rota de login, que seria a rota '/'
-        showSideBar() {
-            return this.$route.fullPath !== '/'
+        isLoginOrRegister() {
+            return this.$route.fullPath == '/' || this.$route.fullPath == '/register';
         }
     }
 }
-
-
 </script>
+
+
 
 <style>
 #app {
@@ -38,8 +34,8 @@ export default {
     flex-grow: 1;
 }
 
-#content {
-    padding: 20px;
+.content {
+    margin: 20px 20px 20px 20px;
 }
 
 nav {
