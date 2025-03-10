@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from "../models/Models.js";
 
 export async function createUser(req, res) {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     try {
         const validaEmail = await User.findOne({ email });
@@ -13,7 +13,7 @@ export async function createUser(req, res) {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new User({ name, email, password: hashedPassword });
+        const newUser = new User({ name, email, password: hashedPassword, role: role || "user" });
         await newUser.save();
 
         res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
@@ -34,16 +34,28 @@ export async function loginUser(req, res) {
         }
 
         const token = jwt.sign(
-            { id: validateEmail._id, name: validateEmail.name },
-            process.env.JWT_SECRET, // Defina isso no .env
+            { id: validateEmail._id, name: validateEmail.name, role: validateEmail.role },
+            process.env.JWT_SECRET, // Definido isso no .env
             { expiresIn: "1h" }
         );
 
         res.status(200).json({ message: "Usuário logado com sucesso!",
             token,
-            name: validateEmail.name
+            name: validateEmail.name,
+            role: validateEmail.role
         });
     } catch (error) {
         res.status(400).json({ message: "Erro ao logar", error});
+    }
+}
+
+export async function listUser(req, res) {
+    try {
+        const users = await User.find().select("id name email role");
+        console.log(users);
+        res.status(200).json(users);
+    }
+    catch (error) {
+        res.status(400).json({ message: "Erro ao listar usuários", error });
     }
 }

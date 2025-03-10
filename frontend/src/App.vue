@@ -37,8 +37,4 @@ export default {
 .content {
     margin: 20px 20px 20px 20px;
 }
-
-nav {
-    width: 100%;
-}
 </style>

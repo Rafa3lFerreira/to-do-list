@@ -1,15 +1,11 @@
 <template>
   <div class="sidebar">
+    <div class="white-space">
+    </div>
     <RouterLink to="/home">
       <div class="item">
         <font-awesome-icon :icon="['fas', 'house']" />
         <span class="tooltip">Home</span>
-      </div>
-    </RouterLink>
-    <RouterLink to="/dev">
-      <div class="item">
-        <font-awesome-icon :icon="['fas', 'registered']" />
-        <span class="tooltip">User register</span>
       </div>
     </RouterLink>
     <RouterLink to="/crud">
@@ -18,13 +14,26 @@
         <span class="tooltip">Crud</span>
       </div>
     </RouterLink>
+    <RouterLink to="/admin" v-if="getRole() == 'admin'">
+      <div class="item">
+        <font-awesome-icon :icon="['fas', 'user-tie']" />
+        <span class="tooltip">Admin Area</span>
+      </div>
+    </RouterLink>
   </div>
 </template>
 
 <script setup>
+import { getRole } from '../main';
+
 </script>
 
 <style scoped>
+.white-space {
+  width: 100%;
+  height: 60px;
+}
+
 .sidebar {
   width: 120px;
   background: #ffffff;
@@ -32,7 +41,6 @@
   flex-direction: column;
   align-items: center;
   padding-bottom: 20px;
-  padding-top: 20px;
   box-shadow: 0 2px 3px 0 rgba(48, 48, 48, .30), 0 6px 10px 4px rgba(48, 48, 48, .15);
 
 }

@@ -9,13 +9,17 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faHome, faList, faRegistered, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faHome, faList, faTrash, faUser, faUserTie } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
-library.add(faHome, faRegistered, faUser, faList)
+library.add(faHome, faUser, faList, faUserTie, faEdit, faTrash)
 
 export function getUsuario() {
     return localStorage.getItem("usuario") || "Usuário";
+}
+
+export function getRole() {
+    return localStorage.getItem("role");
 }
 
 createApp(App)
