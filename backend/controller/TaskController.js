@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from "../models/Models.js";
+import { User, List } from "../models/Models.js";
 
 export async function createUser(req, res) {
     const { name, email, password, role } = req.body;
@@ -57,5 +57,17 @@ export async function listUser(req, res) {
     }
     catch (error) {
         res.status(400).json({ message: "Erro ao listar usuários", error });
+    }
+}
+
+export async function createList(req, res) {
+    const { title, description } = req.body;
+    try {
+        const newList = new List ({ title, description });
+        await newList.save();
+
+        res.status(201).json({ message: "Lista cadastrada com sucesso!" });
+    } catch (error) {
+        
     }
 }

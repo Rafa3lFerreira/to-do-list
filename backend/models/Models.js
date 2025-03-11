@@ -27,6 +27,18 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+const listSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String
+    },
+})
+
+const List = mongoose.model('List', listSchema);
+
 const User = mongoose.model('User', userSchema);
 
 export default User;

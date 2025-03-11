@@ -11,23 +11,23 @@
                 </button>
             </div>
             <div class="tableUsers">
-                <table>
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Actions</th>
+                            <th scope="col" class="alignLeft">ID</th>
+                            <th scope="col" class="alignLeft">Name</th>
+                            <th scope="col" class="alignLeft">Email</th>
+                            <th scope="col" class="alignLeft">Role</th>
+                            <th scope="col" class="alignMiddle">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="user in users" :key="user.id">
-                            <td>{{ user._id }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.role }}</td>
-                            <td class="user-actions">
+                            <th scope="row" class="alignLeft">{{ user._id }}</th>
+                            <td class="alignLeft">{{ user.name }}</td>
+                            <td class="alignLeft">{{ user.email }}</td>
+                            <td class="alignLeft">{{ user.role }}</td>
+                            <td class="alignMiddle">
                                 <button @click="editarUsuario(user._id)">
                                     <font-awesome-icon :icon="['fas', 'edit']" />
                                 </button>
@@ -74,5 +74,36 @@ const excluirUsuario = (id) => {
 .btnTable {
     display: flex;
     gap: 10px;
+    align-items: flex-end;
+}
+
+.tableUsers {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse; 
+}
+
+.alignLeft {
+    padding-left: 10px;
+    text-align: left;
+}
+
+.alignMiddle {
+    text-align: center;
+    padding-left: 10px;
+}
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
 }
 </style>
