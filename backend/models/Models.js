@@ -41,4 +41,4 @@ const List = mongoose.model('List', listSchema);
 
 const User = mongoose.model('User', userSchema);
 
-export default User;
+export default { User, List };
