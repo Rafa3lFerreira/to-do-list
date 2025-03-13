@@ -1,6 +1,7 @@
 <template>
     <div class="contentTitle">
         <h1>User Management</h1>
+        <hr>
         <div class="mainContent">
             <div class="btnTable">
                 <button @click="registerNew">
