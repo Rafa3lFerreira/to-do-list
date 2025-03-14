@@ -70,6 +70,17 @@ export async function createList(req, res) {
 
         res.status(201).json({ message: "Lista cadastrada com sucesso!" });
     } catch (error) {
-        
+        res.status(400).json({ message: "Erro ao cadastrar usuários", error });
+    }
+}
+
+export async function listList(req, res) {
+    try {
+        const listLists = await List.find();
+        console.log(listLists);
+        res.status(200).json(listLists);
+    }
+    catch (error) {
+        res.status(400).json({ message: "Erro ao listar usuários", error });
     }
 }
