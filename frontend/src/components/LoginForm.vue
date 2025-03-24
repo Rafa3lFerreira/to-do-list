@@ -11,7 +11,7 @@
                     <label for="password">Senha</label>
                     <input type="password" id="password" v-model="password" required />
                 </div>
-                <button type="submit" class="login-button">Entrar</button>
+                <button type="submit" class="login-button buttonDefault">Entrar</button>
             </form>
             <p v-if="message">{{ message }}</p>
             <div class="options">

@@ -2,49 +2,38 @@
     <div class="contentTitle">
         <h1>User Management</h1>
         <hr>
-        <div class="mainContent">
-            <div class="btnTable">
-                <button @click="registerNew">
-                    Register
-                </button>
-                <button>
-                    Filtro
-                </button>
-            </div>
-            <div class="tableUsers">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="alignLeft">ID</th>
-                            <th scope="col" class="alignLeft">Name</th>
-                            <th scope="col" class="alignLeft">Email</th>
-                            <th scope="col" class="alignLeft">Role</th>
-                            <th scope="col" class="alignMiddle">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in users" :key="user.id">
-                            <th scope="row" class="alignLeft">{{ user._id }}</th>
-                            <td class="alignLeft">{{ user.name }}</td>
-                            <td class="alignLeft">{{ user.email }}</td>
-                            <td class="alignLeft">{{ user.role }}</td>
-                            <td class="alignMiddle">
-                                <button @click="editarUsuario(user._id)">
-                                    <font-awesome-icon :icon="['fas', 'edit']" />
-                                </button>
-                                <button @click="excluirUsuario(user._id)">
-                                    <font-awesome-icon :icon="['fas', 'trash']" />
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="btnTable">
+            <button class="buttonDefault" @click="registerNew">
+                Register
+            </button>
+            <button class="buttonDefault">
+                Filtro
+            </button>
         </div>
+        <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
+            tableStyle="min-width: 50rem">
+            <Column field="_id" header="ID"></Column>
+            <Column field="name" header="Name"></Column>
+            <Column field="email" header="Email"></Column>
+            <Column field="role" header="Role"></Column>
+            <Column header="Actions">
+                <template #body="slotProps">
+                    <button class="buttonDefault" @click="editarUsuario(slotProps.data._id)">
+                        <font-awesome-icon :icon="['fas', 'edit']" />
+                    </button>
+                    <button class="buttonDefault"
+                        @click="excluirUsuario(slotProps.data._id)">
+                        <font-awesome-icon :icon="['fas', 'trash']" />
+                    </button>
+                </template>
+            </Column>
+        </DataTable>
     </div>
 </template>
 
 <script setup>
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
@@ -75,36 +64,5 @@ const excluirUsuario = (id) => {
 .btnTable {
     display: flex;
     gap: 10px;
-    align-items: flex-end;
-}
-
-.tableUsers {
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    outline: none;
-    transition: border 0.3s ease;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse; 
-}
-
-.alignLeft {
-    padding-left: 10px;
-    text-align: left;
-}
-
-.alignMiddle {
-    text-align: center;
-    padding-left: 10px;
-}
-.table tbody tr {
-    border-bottom: 1px solid #ddd;
-}
-
-.table tbody tr:last-child {
-    border-bottom: none;
 }
 </style>

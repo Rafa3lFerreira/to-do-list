@@ -74,7 +74,7 @@ export async function createList(req, res) {
     }
 }
 
-export async function listList(req, res) {
+export async function allList(req, res) {
     try {
         const listLists = await List.find();
         console.log(listLists);

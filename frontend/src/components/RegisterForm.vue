@@ -22,7 +22,7 @@
           <input v-model="confirmPassword" type="password" id="confirmPassword" required />
           <span :style="{ color: errorMessage }">{{ messageConfirmPassword }}</span>
         </div>
-        <button type="submit" class="register-button">Cadastrar</button>
+        <button type="submit" class="register-button buttonDefault">Cadastrar</button>
         <span v-if="message.text" :style="{ color: message.color }">{{ message.text }}
         </span>
       </form>

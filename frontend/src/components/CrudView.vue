@@ -1,13 +1,12 @@
-<!-- TodoDashboard.vue -->
 <template>
     <div>
         <h1>To-do Lists Management</h1>
         <hr />
         <div>
-            <button @click="showModal = true">Criar nova lista</button>
+            <button class="buttonDefault" @click="showModalAddList = true">Criar nova lista</button>
 
             <!-- Modal -->
-            <div v-if="showModal" class="modal">
+            <div v-if="showModalAddList" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2>Registro de lista</h2>
@@ -24,37 +23,83 @@
         </div>
 
         <!-- Lista de tarefas -->
-        <div v-for="list in lists" :key="list.id" class="todo-list">
-            <div class="todo-list-header" @click="toggleList(list.id)">
-                <strong>{{ list.name }}</strong>
-                <span class="pending">({{ countPending(list.tasks) }} pendentes)</span>
-            </div>
-            <div v-show="openList === list.id" class="todo-tasks">
-                <ul>
-                    <li v-for="task in list.tasks" :key="task.id">
-                        <input type="checkbox" v-model="task.done" />
-                        <span :class="{ done: task.done }">{{ task.name }}</span>
-                    </li>
-                </ul>
-            </div>
+        <div class="card">
+            <DataTable v-model:expandedRows="expandedRows" :value="lists" dataKey="id" tableStyle="min-width: 60rem"
+                @rowExpand="onRowExpand" @rowCollapse="onRowCollapse">
+                <Column expander style="width: 5rem">
+                </Column>
+                <Column field="title" header="Nome da Lista" />
+                <Column field="description" header="Nome da Lista" />
+                <template #expansion="slotProps">
+                    <div class="p-4">
+                        <div class="header">
+                            <h5>Tarefas para "{{ slotProps.data.title }}"</h5>
+                            <button class="buttonDefault" @click="showModalAddJob = true">Adicionar tarefas</button>
+                            <!-- Modal -->
+                            <div v-if="showModalAddJob" class="modal">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2>Registro de atividade</h2>
+                                        <span class="close" @click="closeModaljob">&times;</span>
+                                    </div>
+
+                                    <!-- Formulário do modal -->
+                                    <form class="modal-form" @submit.prevent="addNewList">
+                                        <input type="text" v-model="title" placeholder="Nome da atividade" required />
+                                        <textarea v-model="description" placeholder="Descrição da atividade"></textarea>
+
+                                        <button type="submit">Criar Atividade</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <DataTable :value="slotProps.data.tasks" dataKey="id">
+                            <Column field="name" header="Tarefa" />
+                            <Column field="descricao" header="Descrição da tarefa" />
+                            <Column field="status" header="Status da tarefa" />
+                        </DataTable>
+                    </div>
+                </template>
+            </DataTable>
+            <Toast />
         </div>
     </div>
 </template>
 
 <script setup>
+import { useToast } from 'primevue/usetoast';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Select from 'primevue/select';
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
+const toast = useToast();
+
 const title = ref('');
 const description = ref('');
-const showModal = ref(false);
+const showModalAddJob = ref(false);
+const showModalAddList = ref(false);
+
 const message = ref('');
 
 const lists = ref([]);
+const expandedRows = ref({});
+
+const opcoes = ref([
+    { name: 'Pendente'},
+    { name: 'Em andamento'},
+    { name: 'Concluído'}
+])
 
 const closeModal = () => {
-    showModal.value = false;
+    showModalAddList.value = false;
 };
+
+const closeModaljob = () => {
+    showModalAddJob.value = false;
+}
 
 const addNewList = async () => {
     console.log({ title: title.value, description: description.value });
@@ -74,19 +119,36 @@ const addNewList = async () => {
 
 const listAllList = async () => {
     try {
-        const response = await axios.get("http://localhost:5000/list/list");
+        const response = await axios.get("http://localhost:5000/list/allLists");
         lists.value = response.data;
         console.log(users.value);
     } catch (error) {
-        console.error("Erro ao buscar usuários:", error.response || error);
+        console.error("Erro ao buscar listas:", error.response || error);
     }
+};
+
+const onRowExpand = (event) => {
+    toast.add({
+        severity: 'info',
+        summary: 'Lista Expandida',
+        detail: event.data.title,
+        life: 3000,
+    });
+};
+
+const onRowCollapse = (event) => {
+    toast.add({
+        severity: 'success',
+        summary: 'Lista Recolhida',
+        detail: event.data.title,
+        life: 3000,
+    });
 };
 
 onMounted(listAllList);
 </script>
 
 <style scoped>
-/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -94,14 +156,12 @@ onMounted(listAllList);
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Fundo semi-transparente */
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
 }
 
-/* Conteúdo do modal */
 .modal-content {
     background: #fff;
     border-radius: 8px;
@@ -111,7 +171,6 @@ onMounted(listAllList);
     position: relative;
 }
 
-/* Botão de fechar */
 .close {
     position: absolute;
     top: 10px;
@@ -146,6 +205,14 @@ onMounted(listAllList);
     cursor: pointer;
     font-weight: bold;
     transition: background 0.2s;
+}
+
+.modal-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
 }
 
 .modal-form button:hover {
@@ -199,5 +266,10 @@ onMounted(listAllList);
 .pending {
     font-size: 0.9em;
     color: #555;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
