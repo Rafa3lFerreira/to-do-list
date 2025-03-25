@@ -35,7 +35,14 @@ const listSchema = new mongoose.Schema({
     description: {
         type: String
     },
-})
+    tasks: [
+        {
+            name: { type: String, required: true },
+            status: { type: String, default: false }
+        }
+    ]
+});
+
 
 const List = mongoose.model('List', listSchema);
 
