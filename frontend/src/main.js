@@ -22,6 +22,10 @@ export function getUsuario() {
     return localStorage.getItem("usuario") || "Usuário";
 }
 
+export function getIdUser() {
+    return localStorage.getItem("id");
+}
+
 export function getRole() {
     return localStorage.getItem("role");
 }

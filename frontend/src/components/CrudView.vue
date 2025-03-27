@@ -34,9 +34,9 @@
                     <div class="p-4">
                         <div class="header">
                             <h5>Tarefas para "{{ slotProps.data.title }}"</h5>
-                            <button class="buttonDefault" @click="showModalAddJob = true">Adicionar tarefas</button>
+                            <button class="buttonDefault" @click="showModalAddTask = true">Adicionar tarefas</button>
                             <!-- Modal -->
-                            <div v-if="showModalAddJob" class="modal">
+                            <div v-if="showModalAddTask" class="modal">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h2>Registro de atividade</h2>
@@ -44,10 +44,12 @@
                                     </div>
 
                                     <!-- Formulário do modal -->
-                                    <form class="modal-form" @submit.prevent="addNewList">
-                                        <input type="text" v-model="title" placeholder="Nome da atividade" required />
-                                        <textarea v-model="description" placeholder="Descrição da atividade"></textarea>
-
+                                    <form class="modal-form" @submit.prevent="addNewTask">
+                                        <input type="hidden" v-model="idList">
+                                        <input type="text" v-model="taskTitle" placeholder="Nome da atividade" required />
+                                        <Textarea v-model="taskDescription" size="small" placeholder="Small" rows="3"></Textarea>                                        
+                                        <Select v-model="taskStatus" :options="status" optionLabel="name" size="small" placeholder="Selecione um status" class="md:w-80 full" ></Select>
+                                        <br><br> 
                                         <button type="submit">Criar Atividade</button>
                                     </form>
                                 </div>
@@ -61,44 +63,40 @@
                     </div>
                 </template>
             </DataTable>
-            <Toast />
         </div>
     </div>
 </template>
 
 <script setup>
-import { useToast } from 'primevue/usetoast';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Select from 'primevue/select';
+import Textarea from 'primevue/textarea';
 
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { getIdUser } from '../main';
 
-const toast = useToast();
+const message = ref('');
 
 const title = ref('');
 const description = ref('');
-const showModalAddJob = ref(false);
+const showModalAddTask = ref(false);
 const showModalAddList = ref(false);
-
-const message = ref('');
 
 const lists = ref([]);
 const expandedRows = ref({});
 
-const opcoes = ref([
-    { name: 'Pendente'},
-    { name: 'Em andamento'},
-    { name: 'Concluído'}
-])
-
+const taskTitle = ref('');
+const taskDescription = ref('');
+const status = ref([ { name: 'Pendente' }, { name: 'Em andamento' }, { name: 'Concluído' } ])
+const idList = ref('67e582df2ba343da8274f03a')
 const closeModal = () => {
     showModalAddList.value = false;
 };
 
 const closeModaljob = () => {
-    showModalAddJob.value = false;
+    showModalAddTask.value = false;
 }
 
 const addNewList = async () => {
@@ -106,7 +104,12 @@ const addNewList = async () => {
     try {
         const response = await axios.post('http://localhost:5000/list/create', {
             title: title.value,
-            description: description.value
+            description: description.value,
+            tasks: [{
+                name: null,
+                status: null
+            }],
+            created_by: getIdUser()
         });
         closeModal();
         console.log(response);
@@ -114,8 +117,24 @@ const addNewList = async () => {
         console.error("Erro ao cadastrar:", error.response || error);
         message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
     }
-
 };
+
+// const addNewTask = async () => {
+//     try {
+//         const response = await axios.post('http://localhost:5000/list/taskCreate', {
+//             list : idList,
+//             arrayTask: [{
+//                 name: taskTitle.value,
+//                 status: description.value
+//             }]
+//         });
+//         closeModal();
+//         console.log(response);
+//     } catch (error) {
+//         console.error("Erro ao cadastrar:", error.response || error);
+//         message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
+//     }
+// };
 
 const listAllList = async () => {
     try {
@@ -128,27 +147,21 @@ const listAllList = async () => {
 };
 
 const onRowExpand = (event) => {
-    toast.add({
-        severity: 'info',
-        summary: 'Lista Expandida',
-        detail: event.data.title,
-        life: 3000,
-    });
+    expandedRows.value = { [event.data.id]: event.data };
 };
 
 const onRowCollapse = (event) => {
-    toast.add({
-        severity: 'success',
-        summary: 'Lista Recolhida',
-        detail: event.data.title,
-        life: 3000,
-    });
+    delete expandedRows.value[event.data.id];
 };
 
 onMounted(listAllList);
 </script>
 
 <style scoped>
+.full {
+    width: 100%;
+}
+
 .modal {
     position: fixed;
     top: 0;

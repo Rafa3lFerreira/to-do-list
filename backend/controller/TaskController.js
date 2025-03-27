@@ -43,6 +43,7 @@ export async function loginUser(req, res) {
 
         res.status(200).json({ message: "Usuário logado com sucesso!",
             token,
+            id: validateEmail._id,
             name: validateEmail.name,
             role: validateEmail.role
         });
@@ -63,9 +64,11 @@ export async function listUser(req, res) {
 }
 
 export async function createList(req, res) {
-    const { title, description } = req.body;
+    const { title, description, created_by } = req.body;
+    console.log(req);
     try {
-        const newList = new List ({ title, description });
+
+        const newList = new List ({ title, description, created_by});
         await newList.save();
 
         res.status(201).json({ message: "Lista cadastrada com sucesso!" });
@@ -82,5 +85,16 @@ export async function allList(req, res) {
     }
     catch (error) {
         res.status(400).json({ message: "Erro ao listar usuários", error });
+    }
+}
+
+export async function createTask(req, res) {
+    const { idList, arrayTask } = req.body;
+    try {
+        const result = await List.updateOne({ _id : idList}, { tasks : arrayTask })
+        console.log(result);
+        res.status(201).json({ message: "Task cadastrada com sucesso!"})
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao cadastrar a task", error})
     }
 }

@@ -40,8 +40,9 @@ const login = async () => {
             email: email.value,
             password: password.value
         });
-        const { token, name, role } = response.data;
+        const { token, id, name, role } = response.data;
 
+        localStorage.setItem("id", id);
         localStorage.setItem("token", token);
         localStorage.setItem("usuario", name);
         localStorage.setItem("role", role);

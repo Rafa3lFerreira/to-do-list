@@ -38,9 +38,13 @@ const listSchema = new mongoose.Schema({
     tasks: [
         {
             name: { type: String, required: true },
+            description: {type: String},
             status: { type: String, default: false }
         }
-    ]
+    ],
+    created_by: {
+        type: String,
+    }
 });
 
 
