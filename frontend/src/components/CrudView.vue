@@ -46,10 +46,13 @@
                                     <!-- Formulário do modal -->
                                     <form class="modal-form" @submit.prevent="addNewTask">
                                         <input type="hidden" v-model="idList">
-                                        <input type="text" v-model="taskTitle" placeholder="Nome da atividade" required />
-                                        <Textarea v-model="taskDescription" size="small" placeholder="Small" rows="3"></Textarea>                                        
-                                        <Select v-model="taskStatus" :options="status" optionLabel="name" size="small" placeholder="Selecione um status" class="md:w-80 full" ></Select>
-                                        <br><br> 
+                                        <input type="text" v-model="taskTitle" placeholder="Nome da atividade"
+                                            required />
+                                        <Textarea v-model="taskDescription" size="small" placeholder="Small"
+                                            rows="3"></Textarea>
+                                        <Select v-model="taskStatus" :options="taskStatus" optionLabel="name" size="small"
+                                            placeholder="Selecione um status" class="md:w-80 full"></Select>
+                                        <br><br>
                                         <button type="submit">Criar Atividade</button>
                                     </form>
                                 </div>
@@ -89,7 +92,7 @@ const expandedRows = ref({});
 
 const taskTitle = ref('');
 const taskDescription = ref('');
-const status = ref([ { name: 'Pendente' }, { name: 'Em andamento' }, { name: 'Concluído' } ])
+const taskStatus = ref([{ name: 'Pendente' }, { name: 'Em andamento' }, { name: 'Concluído' }])
 const idList = ref('67e582df2ba343da8274f03a')
 const closeModal = () => {
     showModalAddList.value = false;
@@ -119,22 +122,23 @@ const addNewList = async () => {
     }
 };
 
-// const addNewTask = async () => {
-//     try {
-//         const response = await axios.post('http://localhost:5000/list/taskCreate', {
-//             list : idList,
-//             arrayTask: [{
-//                 name: taskTitle.value,
-//                 status: description.value
-//             }]
-//         });
-//         closeModal();
-//         console.log(response);
-//     } catch (error) {
-//         console.error("Erro ao cadastrar:", error.response || error);
-//         message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
-//     }
-// };
+const addNewTask = async () => {
+    try {
+        const response = await axios.post('http://localhost:5000/list/taskCreate', {
+            idList,
+            arrayTask: [{
+                name: taskTitle.value,
+                description: taskDescription.value,
+                status: taskStatus.value
+            }]
+        });
+        console.log(response);
+        closeModal();
+    } catch (error) {
+        console.error("Erro ao cadastrar:", error.response || error);
+        message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
+    }
+};
 
 const listAllList = async () => {
     try {
