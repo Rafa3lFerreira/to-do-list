@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <navBar v-if="!isLoginOrRegister" />
         <sideBar v-if="!isLoginOrRegister" />
         <div :class="isLoginOrRegister ? 'main' : 'main content'">
             <RouterView />
@@ -8,10 +9,11 @@
 </template>
 
 <script>
+import NavBar from './components/NavBar.vue';
 import sideBar from './components/SideBar.vue'
 
 export default {
-    components: { sideBar },
+    components: { sideBar, NavBar },
     computed: {
         isLoginOrRegister() {
             return this.$route.fullPath == '/' || this.$route.fullPath == '/register';
@@ -35,6 +37,6 @@ export default {
 }
 
 .content {
-    margin: 20px 20px 20px 20px;
+    margin: 40px 20px 20px 20px;
 }
 </style>
