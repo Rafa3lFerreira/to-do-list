@@ -1,9 +1,145 @@
 <template>
     <div class="login-container">
-        <LoginForm />
+        <div class="login-box">
+            <h2>Login</h2>
+            <form @submit.prevent="login">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" v-model="email" required />
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" v-model="password" required />
+                </div>
+                <button type="submit" class="login-button buttonDefault">Entrar</button>
+            </form>
+            <p v-if="message">{{ message }}</p>
+            <div class="options">
+                Não possui uma conta? <RouterLink to="/register">Registre-se</RouterLink>
+            </div>
+        </div>
     </div>
 </template>
 
+
 <script setup>
-import LoginForm from '../components/loginForm.vue';
+import { ref } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import axios from 'axios';
+
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+const message = ref('');
+
+const login = async () => {
+    console.log({ email: email.value, password: password.value });
+    try {
+        const response = await axios.post('http://localhost:5000/user/login', {
+            email: email.value,
+            password: password.value
+        });
+        const { token, id, name, role } = response.data;
+
+        localStorage.setItem("id", id);
+        localStorage.setItem("token", token);
+        localStorage.setItem("usuario", name);
+        localStorage.setItem("role", role);
+
+        message.value = response.data.message;
+        setTimeout(() => {
+            router.replace('/home')
+        }, 2000);
+    } catch (error) {
+        console.error("Erro ao logar:", error.response || error);
+        message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
+    }
+
+};
 </script>
+
+<style scoped>
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #f5f5f5;
+}
+
+.login-box {
+    width: 320px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 4%;
+    box-shadow: 0 2px 3px rgba(48, 48, 48, 0.30), 0 6px 10px rgba(48, 48, 48, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.input-group {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.input-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #777;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background: #555;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.login-button:hover {
+    background: #777;
+    transform: scale(1.05);
+}
+
+.options {
+    display: flex;
+    justify-content: start;
+    font-size: 12px;
+    padding: 10px 0 10px 0;
+}
+
+.options a {
+    padding-left: 2px;
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.options a:hover {
+    color: #000;
+}
+</style>
