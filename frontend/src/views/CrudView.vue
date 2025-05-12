@@ -29,42 +29,14 @@
                 <Column expander style="width: 5rem">
                 </Column>
                 <Column field="title" header="Nome da Lista" />
-                <Column field="description" header="Nome da Lista" />
-                <template #expansion="slotProps">
-                    <div class="p-4">
-                        <div class="header">
-                            <h5>Tarefas para "{{ slotProps.data.title }}"</h5>
-                            <button class="buttonDefault" @click="showModalAddTask = true">Adicionar tarefas</button>
-                            <!-- Modal -->
-                            <div v-if="showModalAddTask" class="modal">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h2>Registro de atividade</h2>
-                                        <span class="close" @click="closeModaljob">&times;</span>
-                                    </div>
-
-                                    <!-- Formulário do modal -->
-                                    <form class="modal-form" @submit.prevent="addNewTask">
-                                        <input type="hidden" v-model="idList">
-                                        <input type="text" v-model="taskTitle" placeholder="Nome da atividade"
-                                            required />
-                                        <Textarea v-model="taskDescription" size="small" placeholder="Small"
-                                            rows="3"></Textarea>
-                                        <Select v-model="taskStatus" :options="taskStatus" optionLabel="name" size="small"
-                                            placeholder="Selecione um status" class="md:w-80 full"></Select>
-                                        <br><br>
-                                        <button type="submit">Criar Atividade</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <DataTable :value="slotProps.data.tasks" dataKey="id">
-                            <Column field="name" header="Tarefa" />
-                            <Column field="descricao" header="Descrição da tarefa" />
-                            <Column field="status" header="Status da tarefa" />
-                        </DataTable>
-                    </div>
-                </template>
+                <Column field="description" header="Descrição da Lista" />
+                <Column header="Ações">
+                    <template #body="slotProps">
+                        <button class="buttonDefault" @click="excluirLista(slotProps.data._id)">
+                            <font-awesome-icon :icon="['fas', 'trash']" />
+                        </button>
+                    </template>
+                </Column>
             </DataTable>
         </div>
     </div>
@@ -79,6 +51,7 @@ import Textarea from 'primevue/textarea';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { getIdUser } from '../main';
+import Swal from 'sweetalert2';
 
 const message = ref('');
 
@@ -92,15 +65,14 @@ const expandedRows = ref({});
 
 const taskTitle = ref('');
 const taskDescription = ref('');
-const taskStatus = ref([{ name: 'Pendente' }, { name: 'Em andamento' }, { name: 'Concluído' }])
-const idList = ref('67e582df2ba343da8274f03a')
+// const idList = ref('67e582df2ba343da8274f03a')
 const closeModal = () => {
     showModalAddList.value = false;
 };
 
-const closeModaljob = () => {
-    showModalAddTask.value = false;
-}
+// const closeModaljob = () => {
+//     showModalAddTask.value = false;
+// }
 
 const addNewList = async () => {
     console.log({ title: title.value, description: description.value });
@@ -115,6 +87,7 @@ const addNewList = async () => {
             created_by: getIdUser()
         });
         closeModal();
+        await listAllList();
         console.log(response);
     } catch (error) {
         console.error("Erro ao cadastrar:", error.response || error);
@@ -122,34 +95,71 @@ const addNewList = async () => {
     }
 };
 
-const addNewTask = async () => {
-    try {
-        const response = await axios.post('http://localhost:5000/list/taskCreate', {
-            idList,
-            arrayTask: [{
-                name: taskTitle.value,
-                description: taskDescription.value,
-                status: taskStatus.value
-            }]
-        });
-        console.log(response);
-        closeModal();
-    } catch (error) {
-        console.error("Erro ao cadastrar:", error.response || error);
-        message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
-    }
-};
+// const addNewTask = async () => {
+//     try {
+//         const response = await axios.post('http://localhost:5000/list/taskCreate', {
+//             idList,
+//             arrayTask: [{
+//                 name: taskTitle.value,
+//                 description: taskDescription.value,
+//                 status: taskStatus.value
+//             }]
+//         });
+//         console.log(response);
+//         closeModal();
+//     } catch (error) {
+//         console.error("Erro ao cadastrar:", error.response || error);
+//         message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
+//     }
+// };
 
 const listAllList = async () => {
     try {
         const response = await axios.get("http://localhost:5000/list/allLists");
         lists.value = response.data;
-        console.log(users.value);
     } catch (error) {
         console.error("Erro ao buscar listas:", error.response || error);
     }
 };
 
+const excluirLista = async (id) => {
+    const confirmacao = await Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Essa ação irá excluir a lista permanentemente.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    });
+    if (confirmacao.isConfirmed) {
+        try {
+            const response = await axios.delete("http://localhost:5000/list/delete", {
+                params: { id: id }
+            });
+            await listAllList();
+
+            await Swal.fire({
+                title: 'Excluído!',
+                text: 'A lista foi excluída com sucesso.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            console.log(response);
+        } catch (error) {
+            console.error("Erro ao excluir a lista:", error.response || error);
+
+            await Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível excluir a lista.',
+                icon: 'error'
+            });
+        }
+    }
+};
 const onRowExpand = (event) => {
     expandedRows.value = { [event.data.id]: event.data };
 };

@@ -88,6 +88,16 @@ export async function allList(req, res) {
     }
 }
 
+export async function deleteList(req, res) {
+    try {
+        const id = req.query.id;
+        await List.deleteOne({ _id: id});
+        res.status(200).json({ message: "Lista deletada com sucesso!"});
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao deletar lista", error });
+    }
+}
+
 export async function createTask(req, res) {
     const { idList, arrayTask } = req.body;
     try {
