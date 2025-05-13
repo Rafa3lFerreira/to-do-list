@@ -25,7 +25,7 @@
         <!-- Lista de tarefas -->
         <div class="card">
             <DataTable v-model:expandedRows="expandedRows" :value="lists" dataKey="id" tableStyle="min-width: 60rem"
-                @rowExpand="onRowExpand" @rowCollapse="onRowCollapse">
+                rowExpansionMode="single" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse">
                 <Column expander style="width: 5rem">
                 </Column>
                 <Column field="title" header="Nome da Lista" />
@@ -37,6 +37,32 @@
                         </button>
                     </template>
                 </Column>
+                <template #expansion="slotProps">
+                    <div class="p-4">
+                        <h5>Orders for {{ slotProps.data.name }}</h5>
+                        <DataTable :value="slotProps.data.orders">
+                            <Column field="id" header="Id" sortable></Column>
+                            <Column field="customer" header="Customer" sortable></Column>
+                            <Column field="date" header="Date" sortable></Column>
+                            <Column field="amount" header="Amount" sortable>
+                                <template #body="slotProps">
+                                    {{ formatCurrency(slotProps.data.amount) }}
+                                </template>
+                            </Column>
+                            <Column field="status" header="Status" sortable>
+                                <template #body="slotProps">
+                                    <Tag :value="slotProps.data.status.toLowerCase()"
+                                        :severity="getOrderSeverity(slotProps.data)" />
+                                </template>
+                            </Column>
+                            <Column headerStyle="width:4rem">
+                                <template #body>
+                                    <Button icon="pi pi-search" />
+                                </template>
+                            </Column>
+                        </DataTable>
+                    </div>
+                </template>
             </DataTable>
         </div>
     </div>

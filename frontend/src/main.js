@@ -12,11 +12,11 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faEdit, faHome, faList, faPlus, faTrash, faUser, faUserTie } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faHome, faList, faMagnifyingGlass, faPlus, faTrash, faUser, faUserTie } from '@fortawesome/free-solid-svg-icons'
 
 
 /* add icons to the library */
-library.add(faHome, faUser, faList, faUserTie, faEdit, faTrash, faPlus)
+library.add(faHome, faUser, faList, faUserTie, faEdit, faTrash, faPlus, faMagnifyingGlass)
 
 export function getUsuario() {
     return localStorage.getItem("usuario") || "Usuário";

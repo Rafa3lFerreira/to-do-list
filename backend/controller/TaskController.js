@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import Models  from "../models/Models.js";
+import Models from "../models/Models.js";
 
 const { User, List } = Models;
 
@@ -28,11 +28,11 @@ export async function loginUser(req, res) {
     const { email, password } = req.body;
 
     try {
-        const validateEmail = await User.findOne ({ email });
+        const validateEmail = await User.findOne({ email });
         const validatePassword = await bcrypt.compare(password, validateEmail.password);
 
-        if(!validateEmail || !validatePassword) {
-            return res.status(400).json({ message: "E-mail ou senha incorretos!"});
+        if (!validateEmail || !validatePassword) {
+            return res.status(400).json({ message: "E-mail ou senha incorretos!" });
         }
 
         const token = jwt.sign(
@@ -41,14 +41,15 @@ export async function loginUser(req, res) {
             { expiresIn: "1h" }
         );
 
-        res.status(200).json({ message: "Usuário logado com sucesso!",
+        res.status(200).json({
+            message: "Usuário logado com sucesso!",
             token,
             id: validateEmail._id,
             name: validateEmail.name,
             role: validateEmail.role
         });
     } catch (error) {
-        res.status(400).json({ message: "Erro ao logar", error});
+        res.status(400).json({ message: "Erro ao logar", error });
     }
 }
 
@@ -68,7 +69,7 @@ export async function createList(req, res) {
     console.log(req);
     try {
 
-        const newList = new List ({ title, description, created_by});
+        const newList = new List({ title, description, created_by });
         await newList.save();
 
         res.status(201).json({ message: "Lista cadastrada com sucesso!" });
@@ -91,8 +92,8 @@ export async function allList(req, res) {
 export async function deleteList(req, res) {
     try {
         const id = req.query.id;
-        await List.deleteOne({ _id: id});
-        res.status(200).json({ message: "Lista deletada com sucesso!"});
+        await List.deleteOne({ _id: id });
+        res.status(200).json({ message: "Lista deletada com sucesso!" });
     } catch (error) {
         res.status(400).json({ message: "Erro ao deletar lista", error });
     }
@@ -101,10 +102,20 @@ export async function deleteList(req, res) {
 export async function createTask(req, res) {
     const { idList, arrayTask } = req.body;
     try {
-        const result = await List.updateOne({ _id : idList}, { tasks : arrayTask })
+        const result = await List.updateOne({ _id: idList }, { tasks: arrayTask })
         console.log(result);
-        res.status(201).json({ message: "Task cadastrada com sucesso!"})
+        res.status(201).json({ message: "Task cadastrada com sucesso!" })
     } catch (error) {
-        res.status(400).json({ message: "Erro ao cadastrar a task", error})
+        res.status(400).json({ message: "Erro ao cadastrar a task", error })
+    }
+}
+
+export async function deleteUser(req, res) {
+    try {
+        const id = req.query.id;
+        await User.deleteOne({ _id: id });
+        res.status(200).json({ message: "Usuário deletado com sucesso!" });
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao deletar usuário", error });
     }
 }
