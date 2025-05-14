@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    role: { 
-        type: String, 
-        enum: ["admin", "user"], 
-        default: "user" 
+    role: {
+        type: String,
+        enum: ["admin", "user"],
+        default: "user"
     }
 });
 
@@ -41,9 +41,31 @@ const listSchema = new mongoose.Schema({
     }
 });
 
-
-const List = mongoose.model('List', listSchema);
+const logSchema = new mongoose.Schema({
+    message: {
+        type: String,
+        required: true
+    },
+    level: {
+        type: String,
+        required: true,
+        enum: ['INFO', 'WARN', 'ERROR']
+    },
+    details: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed, 
+        default: {}
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
+});
 
 const User = mongoose.model('User', userSchema);
 
-export default { User, List };
+const List = mongoose.model('List', listSchema);
+
+const Log = mongoose.model('Log', logSchema);
+
+export default { User, List, Log };

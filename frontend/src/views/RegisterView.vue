@@ -32,6 +32,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 // Campos do form
@@ -48,6 +49,9 @@ const message = ref({ text: "", color: "" });
 
 // Váriavel para adicionar o style nas mensagens de erro
 const errorMessage = ref('red');
+
+// Adiciona o router
+const router = useRouter();
 
 const register = async () => {
   // Aqui zero o valor das mensagens de erro após cada tentativa de registro
@@ -81,7 +85,7 @@ const register = async () => {
 
       message.value = { text: response.data.message, color: "green"};
       setTimeout(() => {
-        router.replace('/')
+        router.replace('/');
       }, 2000);
     } catch (error) {
       console.error("Erro ao registrar:", error.response || error);

@@ -5,6 +5,8 @@ import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import ToastService from 'primevue/toastservice';
+import Toast from 'primevue/toast'
+import axios from "axios";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -30,7 +32,21 @@ export function getRole() {
     return localStorage.getItem("role");
 }
 
+export async function sendLog(message, level, details = {}) {
+    try {
+        await axios.post("http://localhost:3000/logs", {
+            message,
+            level,
+            details,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error("Erro ao enviar log:", error);
+    }
+}
+
 createApp(App)
+    .component('Toast', Toast)
     .component('font-awesome-icon', FontAwesomeIcon)
     .use(router)
     .use(PrimeVue, { theme: { preset: Aura } })

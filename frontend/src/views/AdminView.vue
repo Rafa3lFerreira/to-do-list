@@ -37,8 +37,13 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 
 import Swal from 'sweetalert2';
+import { useToast } from 'primevue/usetoast'
 
+import { sendLog } from '../main';
+
+const toast = useToast()
 const users = ref([]);
+
 
 const listUsers = async () => {
     try {
@@ -66,28 +71,23 @@ const excluirUsuario = async (id) => {
         try {
             await axios.delete("http://localhost:5000/user/delete/", { params: { id: id } });
 
-            await Swal.fire({
-                title: 'Excluído!',
-                text: 'Esse usuário foi excluído com sucesso.',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
+            sendLog('Delete', 'INFO', {})
+            toast.add({
+                severity: 'success',
+                summary: 'Usuário excluído',
+                detail: 'O usuário foi removido com sucesso!',
+                life: 3000
             });
             await listUsers();
 
         } catch (error) {
-            await Swal.fire({
-                title: 'Erro!',
-                text: 'Não foi possível excluir a lista:' + error.response || error,
-                icon: 'error'
+            toast.add({
+                severity: 'error',
+                summary: 'Erro ao excluir',
+                detail: 'Erro ao excluir usuário: ' + (error.response?.data?.message || error.message),
+                life: 5000
             });
         }
-    } else if (alert.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({
-            title: "Cancelled",
-            text: "Your imaginary file is safe :)",
-            icon: "error"
-        });
     }
 };
 </script>

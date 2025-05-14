@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <Toast />
         <navBar v-if="!isLoginOrRegister" />
         <sideBar v-if="!isLoginOrRegister" />
         <div :class="isLoginOrRegister ? 'main' : 'main content'">

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Models from "../models/Models.js";
 
-const { User, List } = Models;
+const { User, List, Log } = Models;
 
 export async function createUser(req, res) {
     const { name, email, password, role } = req.body;
@@ -117,5 +117,17 @@ export async function deleteUser(req, res) {
         res.status(200).json({ message: "Usuário deletado com sucesso!" });
     } catch (error) {
         res.status(400).json({ message: "Erro ao deletar usuário", error });
+    }
+}
+
+export async function createLog(req, res) {
+    const { message, level, details, timestamp } = req.body;
+    try {
+        const newLog = new Log({ message, level, details, timestamp });
+        await newLog.save();
+
+        res.status(201).json({ message: "Log criado com sucesso!" });
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao criar log", error });
     }
 }
