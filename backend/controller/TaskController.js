@@ -131,3 +131,14 @@ export async function createLog(req, res) {
         res.status(400).json({ message: "Erro ao criar log", error });
     }
 }
+
+export async function searchLog(req, res) {
+    try {
+        const id = req.query.id;
+        const logs = await Log.find({ "details.id": id })
+
+        res.status(200).json({ message: "Logs encontrados com sucesso!", logs: logs });
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao buscar log", error });
+    }
+}

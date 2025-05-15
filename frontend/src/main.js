@@ -34,7 +34,7 @@ export function getRole() {
 
 export async function sendLog(message, level, details = {}) {
     try {
-        await axios.post("http://localhost:3000/logs", {
+        await axios.post("http://localhost:5000/log/create", {
             message,
             level,
             details,

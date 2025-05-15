@@ -21,9 +21,21 @@
                     <button class="buttonDefault" @click="excluirUsuario(slotProps.data._id)">
                         <font-awesome-icon :icon="['fas', 'trash']" />
                     </button>
-                    <button class="buttonDefault" @click="verLog(slotProps.data._id)">
+                    <button class="buttonDefault" @click="listLogByUser(slotProps.data._id)">
                         <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
                     </button>
+                    <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
+                        <div class="modal-content">
+                            <h2>Logs do Usuário</h2>
+                            <button @click="closeModal">Fechar</button>
+
+                            <ul>
+                                <li v-for="(log, index) in userLogs" :key="index">
+                                    {{ log.timestamp }} - {{ log.action }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </template>
             </Column>
         </DataTable>
@@ -39,11 +51,13 @@ import axios from "axios";
 import Swal from 'sweetalert2';
 import { useToast } from 'primevue/usetoast'
 
-import { sendLog } from '../main';
+import { sendLog, getIdUser } from '../main';
 
 const toast = useToast()
 const users = ref([]);
 
+const userLogs = ref([])
+const showModal = ref(false)
 
 const listUsers = async () => {
     try {
@@ -56,6 +70,10 @@ const listUsers = async () => {
 };
 
 onMounted(listUsers);
+
+const registerNew = async () => {
+
+}
 
 const excluirUsuario = async (id) => {
     const alert = await Swal.fire({
@@ -71,7 +89,15 @@ const excluirUsuario = async (id) => {
         try {
             await axios.delete("http://localhost:5000/user/delete/", { params: { id: id } });
 
-            sendLog('Delete', 'INFO', {})
+            const details = {
+                user_id: getIdUser(),
+                action: "delete",
+                deleted_user: id,
+                ip: "não implementado"
+            };
+
+            sendLog('User delete', 'INFO', details);
+
             toast.add({
                 severity: 'success',
                 summary: 'Usuário excluído',
@@ -90,6 +116,32 @@ const excluirUsuario = async (id) => {
         }
     }
 };
+
+const listLogByUser = async (id) => {
+    try {
+        const response = await axios.get("http://localhost:5000/log/search", { params: { id: id } })
+
+        toast.add({
+            severity: 'success',
+            summary: 'Busca realizada',
+            life: 3000
+        });
+
+        userLogs.value = response.logs
+        showModal.value = true
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: 'Erro ao consultar',
+            detail: 'Erro ao consultar logs do usuário: ' + (error.response?.data?.message || error.message),
+            life: 5000
+        });
+    }
+}
+
+const closeModal = () => {
+  showModal.value = false
+}
 </script>
 
 <style scoped>
