@@ -13,10 +13,10 @@
                 </div>
                 <button type="submit" class="login-button buttonDefault">Entrar</button>
             </form>
-            <p v-if="message">{{ message }}</p>
             <div class="options">
                 Não possui uma conta? <RouterLink to="/register">Registre-se</RouterLink>
             </div>
+            <p>{{ message }}</p>
         </div>
     </div>
 </template>
