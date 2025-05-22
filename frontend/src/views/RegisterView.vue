@@ -147,20 +147,6 @@ const goToStep = (n) => {
   step.value = n
 }
 
-// Handle da foto
-const handlePhotoUpload = (event) => {
-  const file = event.target.files[0]
-  if (file && file.type.startsWith('image/')) {
-    photo.value = file
-    photoPreview.value = URL.createObjectURL(file)
-  } else {
-    photo.value = null
-    photoPreview.value = null
-    alert('Por favor, selecione uma imagem válida.')
-  }
-}
-
-
 const register = async () => {
   // Aqui zero o valor das mensagens de erro após cada tentativa de registro
   messagePassword.value = '';
@@ -188,7 +174,8 @@ const register = async () => {
       const response = await axios.post('http://localhost:5000/user/create', {
         name: name.value,
         email: email.value,
-        password: password.value
+        password: password.value,
+        img: photo.value
       });
 
       message.value = { text: response.data.message, color: "green" };

@@ -5,7 +5,7 @@ import Models from "../models/Models.js";
 const { User, List, Log } = Models;
 
 export async function createUser(req, res) {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, img } = req.body;
 
     try {
         const validaEmail = await User.findOne({ email });
@@ -15,7 +15,7 @@ export async function createUser(req, res) {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new User({ name, email, password: hashedPassword, role: role || "user" });
+        const newUser = new User({ name, email, password: hashedPassword, role: role || "user", img });
         await newUser.save();
 
         res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
