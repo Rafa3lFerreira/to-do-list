@@ -34,7 +34,7 @@ export function getRole() {
 
 export async function sendLog(message, level, details = {}) {
     try {
-        await axios.post("http://localhost:5000/log/create", {
+        await axios.post(`${import.meta.env.VITE_API_URL}/log/create`, {
             message,
             level,
             details,

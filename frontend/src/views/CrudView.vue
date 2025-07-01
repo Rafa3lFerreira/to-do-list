@@ -103,7 +103,7 @@ const closeModal = () => {
 const addNewList = async () => {
     console.log({ title: title.value, description: description.value });
     try {
-        const response = await axios.post('http://localhost:5000/list/create', {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/list/create`, {
             title: title.value,
             description: description.value,
             tasks: [{
@@ -123,7 +123,7 @@ const addNewList = async () => {
 
 // const addNewTask = async () => {
 //     try {
-//         const response = await axios.post('http://localhost:5000/list/taskCreate', {
+//         const response = await axios.post(`${import.meta.env.VITE_API_URL}/list/taskCreate`, {
 //             idList,
 //             arrayTask: [{
 //                 name: taskTitle.value,
@@ -141,7 +141,7 @@ const addNewList = async () => {
 
 const listAllList = async () => {
     try {
-        const response = await axios.get("http://localhost:5000/list/allLists");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/list/allLists`);
         lists.value = response.data;
     } catch (error) {
         console.error("Erro ao buscar listas:", error.response || error);
@@ -161,7 +161,7 @@ const excluirLista = async (id) => {
     });
     if (confirmacao.isConfirmed) {
         try {
-            const response = await axios.delete("http://localhost:5000/list/delete", {
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/list/delete`, {
                 params: { id: id }
             });
             await listAllList();

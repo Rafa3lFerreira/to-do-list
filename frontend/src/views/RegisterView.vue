@@ -171,7 +171,7 @@ const register = async () => {
     return;
   } else { // Caso passe todas as validações segue o registro para a API
     try {
-      const response = await axios.post('http://localhost:5000/user/create', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/create`, {
         name: name.value,
         email: email.value,
         password: password.value,

@@ -61,7 +61,7 @@ const showModal = ref(false)
 
 const listUsers = async () => {
     try {
-        const response = await axios.get("http://localhost:5000/user/list");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/list`);
         users.value = response.data;
         console.log(users.value);
     } catch (error) {
@@ -87,7 +87,7 @@ const excluirUsuario = async (id) => {
         cancelButtonText: "Não!"
     }); if (alert.isConfirmed) {
         try {
-            await axios.delete("http://localhost:5000/user/delete/", { params: { id: id } });
+            await axios.delete(`${import.meta.env.VITE_API_URL}/user/delete/`, { params: { id: id } });
 
             const details = {
                 user_id: getIdUser(),
@@ -119,7 +119,7 @@ const excluirUsuario = async (id) => {
 
 const listLogByUser = async (id) => {
     try {
-        const response = await axios.get("http://localhost:5000/log/search", { params: { id: id } })
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/log/search`, { params: { id: id } })
 
         toast.add({
             severity: 'success',
