@@ -32,15 +32,21 @@
     <Dialog v-model:visible="visible" modal header="Histórico de logs" :style="{ width: '50rem' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <template v-for="(userLog, index) in userLogs" :key="index">
-            <div class="p-4">
-                <h5>Handled By: {{ userLog.details.id }}</h5>
-                <p>Action: {{ userLog.details.action }}</p>
-                <p>IP: {{ userLog.details.ip }}</p>
-                <p>Level: {{ userLog.level }}</p>
-                <p>Timestamp: {{ userLog.timestamp }}</p>
-                <button class="buttonDefault">
-                    <font-awesome-icon :icon="['fas', 'copy']" />
-                </button>
+            <div class="logHistory">
+                <div class="logContent">
+                    <div class="logText">
+                        <h5>Handled By: {{ userLog.details.id }}</h5>
+                        <p>Action: {{ userLog.details.action }}</p>
+                        <p>IP: {{ userLog.details.ip }}</p>
+                        <p>Level: {{ userLog.level }}</p>
+                        <p>Timestamp: {{ formatDatelog(userLog.timestamp) }}</p>
+                    </div>
+                    <div class="logButton">
+                        <button class="buttonDefault" @click="copyText(userLog)">
+                            <font-awesome-icon :icon="['fas', 'copy']" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </template>
     </Dialog>
@@ -57,6 +63,8 @@ import Swal from 'sweetalert2';
 import { useToast } from 'primevue/usetoast'
 
 import { sendLog, getIdUser } from '../main';
+
+import dayjs from 'dayjs';
 
 const toast = useToast()
 const users = ref([]);
@@ -145,11 +153,72 @@ const listLogByUser = async (id) => {
     }
 }
 
+const copyText = async (userLog) => {
+    const textClipBoard = `
+    {
+        "_id": ${userLog._id},
+        "message": ${userLog.message},
+        "level": ${userLog.level},
+        "details": {
+            "id": ${userLog.details.id},
+            "action": ${userLog.details.action},
+            "usuario": ${userLog.details.usuario},
+            "ip": ${userLog.details.ip},
+        },
+        "timestamp": ${formatDatelog(userLog.timestamp)}
+    }
+    `.trim();
+
+    try {
+        await navigator.clipboard.writeText(textClipBoard);
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: 'Erro ao copiar',
+            detail: 'Erro ao copiar log: ' + (error.response?.data?.message || error.message),
+            life: 5000
+        });
+    }
+}
+
+const formatDatelog = (timestamp) => {
+    return dayjs(timestamp).format('YYYY/MM/DD HH:mm:ss');
+}
+
 </script>
 
 <style scoped>
 .btnTable {
     display: flex;
     gap: 10px;
+}
+
+.logHistory {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+.logContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.logText {
+    display: flex;
+    flex-direction: column;
+}
+
+.logButton {
+    display: flex;
+    align-items: start;
+}
+
+.buttonDefault {
+    cursor: pointer;
 }
 </style>
