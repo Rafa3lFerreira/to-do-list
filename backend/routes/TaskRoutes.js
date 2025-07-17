@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, loginUser, listUser, createList, allList, createTask, deleteList, deleteUser, createLog, searchLog } from "../controller/TaskController.js";
+import { createUser, loginUser, listUser, listUserById, createList, allList, createTask, deleteList, deleteUser, createLog, searchLog } from "../controller/TaskController.js";
 import cors from 'cors';
 
 const routes = (app) => {
@@ -10,6 +10,7 @@ const routes = (app) => {
     app.post("/user/create", createUser);
     app.post("/user/login", loginUser);
     app.get("/user/list", listUser);
+    app.get("/user/list/:id", listUserById);
     app.delete("/user/delete", deleteUser);
 
 

@@ -64,6 +64,17 @@ export async function listUser(req, res) {
     }
 }
 
+export async function listUserById(req, res) {
+    try {
+        id = req.params.id;
+        const users = await User.find({_id: id}).select("id name email role");
+        console.log(users);
+        res.status(200).json(users);
+    }
+    catch (error) {
+        res.status(400).json({ message: "Erro ao listar usuários", error });
+    }
+}
 export async function createList(req, res) {
     const { title, description, created_by } = req.body;
     console.log(req);

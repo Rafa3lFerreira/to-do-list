@@ -24,27 +24,32 @@
                     <button class="buttonDefault" @click="listLogByUser(slotProps.data._id)">
                         <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
                     </button>
-                    <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
-                        <div class="modal-content">
-                            <h2>Logs do Usuário</h2>
-                            <button @click="closeModal">Fechar</button>
-
-                            <ul>
-                                <li v-for="(log, index) in userLogs" :key="index">
-                                    {{ log.timestamp }} - {{ log.action }}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </template>
             </Column>
         </DataTable>
     </div>
+
+    <Dialog v-model:visible="visible" modal header="Histórico de logs" :style="{ width: '50rem' }"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <template v-for="(userLog, index) in userLogs" :key="index">
+            <div class="p-4">
+                <h5>Handled By: {{ userLog.details.id }}</h5>
+                <p>Action: {{ userLog.details.action }}</p>
+                <p>IP: {{ userLog.details.ip }}</p>
+                <p>Level: {{ userLog.level }}</p>
+                <p>Timestamp: {{ userLog.timestamp }}</p>
+                <button class="buttonDefault">
+                    <font-awesome-icon :icon="['fas', 'copy']" />
+                </button>
+            </div>
+        </template>
+    </Dialog>
 </template>
 
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Dialog from 'primevue/dialog';
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
@@ -57,13 +62,12 @@ const toast = useToast()
 const users = ref([]);
 
 const userLogs = ref([])
-const showModal = ref(false)
+const visible = ref(false)
 
 const listUsers = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/list`);
         users.value = response.data;
-        console.log(users.value);
     } catch (error) {
         console.error("Erro ao buscar usuários:", error.response || error);
     }
@@ -118,6 +122,8 @@ const excluirUsuario = async (id) => {
 };
 
 const listLogByUser = async (id) => {
+    visible.value = true;
+
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/log/search`, { params: { id: id } })
 
@@ -127,8 +133,8 @@ const listLogByUser = async (id) => {
             life: 3000
         });
 
-        userLogs.value = response.logs
-        showModal.value = true
+        userLogs.value = response.data.logs
+
     } catch (error) {
         toast.add({
             severity: 'error',
@@ -139,9 +145,6 @@ const listLogByUser = async (id) => {
     }
 }
 
-const closeModal = () => {
-  showModal.value = false
-}
 </script>
 
 <style scoped>
