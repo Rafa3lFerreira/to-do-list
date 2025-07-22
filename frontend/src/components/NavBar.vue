@@ -14,7 +14,7 @@ import { getUsuario } from '../main';
 </script>
 <style scoped>
 .navbar {
-    width: calc(100% - 200px);
+    width: 100%;
     height: 60px;
     background-color: #fff;
     display: flex;
