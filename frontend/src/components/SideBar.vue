@@ -29,17 +29,18 @@ const isCollapsed = ref(false);
 <style scoped>
 .sidebar {
   width: 200px;
-  background: #ffffff;
+  background-color: var(--body-bg);
   display: flex;
   flex-direction: column;
   padding-top: 80px;
   transition: all 0.3s ease;
   box-sizing: border-box;
   overflow: hidden;
-  box-shadow: 0px 0.3px 0.9px rgba(0, 0, 0, 0.1), 0px 1.6px 3.6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--sidebar-box-shadow);
   top: 0;
   left: 0;
   height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .sidebar.collapsed {
@@ -56,6 +57,7 @@ const isCollapsed = ref(false);
 }
 
 .toggle-btn {
+  color: var(--sidebar-toggle-btn);
   background: none;
   border: none;
   font-size: 20px;
@@ -76,7 +78,7 @@ const isCollapsed = ref(false);
   width: 100%;
   padding: 15px 20px;
   margin-bottom: 10px;
-  color: black;
+  color: var(--sidebar-text);
   text-decoration: none;
   border-radius: 10px;
   transition: background 0.3s ease, transform 0.3s ease;
@@ -85,7 +87,7 @@ const isCollapsed = ref(false);
 }
 
 .item:hover {
-  background-color: #eff1f8;
+  background-color: var(--sidebar-hover-bg);
   transform: scale(1.02);
 }
 </style>

@@ -2,15 +2,12 @@
     <div>
         <h1>{{ saudacao }}, {{ getUsuario() }}</h1>
         <hr>
-        <div class="chart-container">
-            <BarChart />
-        </div>
+        
     </div>
 </template>
 
 <script setup>
 import { getUsuario } from '../main';
-import BarChart from '../components/InteractionChart.vue'
 import { computed } from 'vue';
 
 const saudacao = computed(() => {
@@ -30,11 +27,5 @@ const saudacao = computed(() => {
 </script>
 
 <style scoped>
-.chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 60vh;
-}
+
 </style>

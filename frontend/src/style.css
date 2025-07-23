@@ -11,6 +11,26 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --navbar-bg: #20C997;
+  --navbar-text: white;
+  --body-bg: white;
+  --body-text: black;
+  --sidebar-text: #222222;
+  --sidebar-hover-bg: #eff1f8;
+  --sidebar-box-shadow: 0px 0.3px 0.9px rgba(0, 0, 0, 0.1), 0px 1.6px 3.6px rgba(0, 0, 0, 0.1);
+  --sidebar-toggle-btn: #222222;
+}
+
+.dark {
+  --navbar-bg: #0e5c4e;
+  --navbar-text: #e0e0e0;
+  --body-bg: #121212;
+  --body-text: #ffffff;
+  --sidebar-text: #dddddd;
+  --sidebar-hover-bg: #333a50;
+  --sidebar-box-shadow: 0 0 2.5px 0px white;
+  --sidebar-toggle-btn: #dddddd;
 }
 
 .buttonDefault {
@@ -53,7 +73,9 @@ body {
   overflow-y: auto; 
   font-weight: normal;
   margin: 0;
-  background-color:#ffffff;
+  background-color: var(--body-bg);
+  color: var(--body-text);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h1 {
