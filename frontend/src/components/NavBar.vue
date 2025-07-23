@@ -5,7 +5,7 @@
         <ToggleSwitch v-model="checked" @change="toggleDarkMode" />
       </div>
       <div class="profile-pic">
-        <img :src="`https://ui-avatars.com/api/?name=${getUsuario()}&background=20C997&color=fff`" />
+        <img :src="`${avatarUrl()}`" />
       </div>
     </div>
   </div>
@@ -21,6 +21,13 @@ const checked = ref(false)
 const toggleDarkMode = () => {
   document.documentElement.classList.toggle('dark', checked.value)
   localStorage.setItem('darkMode', checked.value)
+}
+
+const avatarUrl = () => {
+  const isDark = document.documentElement.classList.contains('dark');
+  const bgColor = isDark ? '0E5C4E' : '20C997';
+  const textColor = 'fff';
+  return `https://ui-avatars.com/api/?name=${getUsuario()}&background=${bgColor}&color=${textColor}`;
 }
 
 onMounted(() => {
@@ -60,7 +67,7 @@ onMounted(() => {
   object-fit: cover;
   cursor: pointer;
   overflow: hidden;
-  border: 1.8px solid #fff;
+  border: var(--icon-border);
 }
 
 .profile-pic img {
