@@ -19,10 +19,10 @@
             <Column header="Actions">
                 <template #body="slotProps">
                     <button class="buttonDefault" @click="excluirUsuario(slotProps.data._id)">
-                        <font-awesome-icon :icon="['fas', 'trash']" />
+                        <i class="pi pi-trash"></i>
                     </button>
                     <button class="buttonDefault" @click="listLogByUser(slotProps.data._id)">
-                        <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                        <i class="pi pi-search"></i>
                     </button>
                 </template>
             </Column>

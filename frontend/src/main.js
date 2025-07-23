@@ -7,6 +7,7 @@ import Aura from '@primeuix/themes/aura';
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast'
 import axios from "axios";
+import 'primeicons/primeicons.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 
