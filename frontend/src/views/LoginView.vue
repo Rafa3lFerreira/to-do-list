@@ -16,7 +16,7 @@
             <div class="options">
                 Não possui uma conta? <RouterLink to="/register">Registre-se</RouterLink>
             </div>
-            <p>{{ message }}</p>
+            <span v-if="message.text" :style="{ color: message.color }" class="error">{{ message.text }}</span>
         </div>
     </div>
 </template>
@@ -46,13 +46,12 @@ const login = async () => {
         localStorage.setItem("usuario", name);
         localStorage.setItem("role", role);
 
-        message.value = response.data.message;
+        message.value = { text: response.data.message, color: "#22c55e" };
         setTimeout(() => {
             router.replace('/home')
         }, 2000);
     } catch (error) {
-        console.error("Erro ao logar:", error.response || error);
-        message.value = error.response?.data?.message || "Erro desconhecido ao logar.";
+        message.value = { text: error.response.data.message, color: "#e74c3c" }
     }
 
 };
@@ -110,7 +109,7 @@ const login = async () => {
 .login-button {
     width: 100%;
     padding: 10px;
-    background: #555;
+    background: #20C997;
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -120,7 +119,7 @@ const login = async () => {
 }
 
 .login-button:hover {
-    background: #777;
+    background: #17a589;
     transform: scale(1.05);
 }
 
@@ -128,13 +127,13 @@ const login = async () => {
     display: flex;
     justify-content: start;
     font-size: 12px;
-    padding: 10px 0 10px 0;
+    padding: 10px 0 0 0;
 }
 
 .options a {
     padding-left: 2px;
     text-decoration: none;
-    color: #666;
+    color: #555;
     transition: color 0.3s ease;
 }
 

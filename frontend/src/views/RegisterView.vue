@@ -1,108 +1,52 @@
 <template>
   <div class="register-container">
     <div class="register-box">
+      <button class="back-to-login-btn" @click="goToLogin">←</button>
       <h2>Crie a sua conta</h2>
+      <p class="step-indicator">Etapa {{ step }} de 3</p>
       <form @submit.prevent="register">
         <div v-if="step == 1" key="step-1">
           <div class="input-group">
-            <label for="nome">Nome</label>
-            <input v-model="name" type="text" id="nome" required />
-            <span :style="{ color: errorMessage }">{{ messageName }}</span>
+            <label for="nome">Name</label>
+            <InputText type="text" v-model="name" id="name" />
+            <span class="error">{{ messageName }}</span>
           </div>
           <div class="input-group">
             <label for="email">E-mail</label>
-            <input v-model="email" type="email" id="email" required />
-          </div>
-          <div class="input-group">
-            <label for="password">Senha</label>
-            <input v-model="password" type="password" id="password" required />
-            <span :style="{ color: errorMessage }">{{ messagePassword }}</span>
-          </div>
-          <div class="input-group">
-            <label for="confirmPassword">Confirme a senha</label>
-            <input v-model="confirmPassword" type="password" id="confirmPassword" required />
-            <span :style="{ color: errorMessage }">{{ messageConfirmPassword }}</span>
+            <InputText type="email" v-model="email" id="email" />
+            <span class="error">{{ messageEmail }}</span>
           </div>
           <button type="button" @click="goToStep(2)" class="register-button buttonDefault">Próxima etapa</button>
         </div>
-        <!-- Etapa 2: senha e foto -->
-        <div v-else key="step-2">
-          <!-- Upload de foto -->
-          <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true"
-            accept="image/*" :maxFileSize="1000000" @select="onSelectedFiles">
-            <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
-              <div class="flex flex-wrap justify-between items-center flex-1 gap-4">
-                <div class="flex gap-2">
-                  <Button @click="chooseCallback()" icon="pi pi-images" rounded outlined severity="secondary"></Button>
-                  <Button @click="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" rounded outlined
-                    severity="success" :disabled="!files || files.length === 0"></Button>
-                  <Button @click="clearCallback()" icon="pi pi-times" rounded outlined severity="danger"
-                    :disabled="!files || files.length === 0"></Button>
-                </div>
-                <ProgressBar :value="totalSizePercent" :showValue="false" class="md:w-20rem h-1 w-full md:ml-auto">
-                  <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
-                </ProgressBar>
-              </div>
-            </template>
-            <template #content="{ files, uploadedFiles, removeUploadedFileCallback, removeFileCallback, messages }">
-              <div class="flex flex-col gap-8 pt-4">
-                <Message v-for="message of messages" :key="message"
-                  :class="{ 'mb-8': !files.length && !uploadedFiles.length }" severity="error">
-                  {{ message }}
-                </Message>
-
-                <div v-if="files.length > 0">
-                  <h5>Pending</h5>
-                  <div class="flex flex-wrap gap-4">
-                    <div v-for="(file, index) of files" :key="file.name + file.type + file.size"
-                      class="p-8 rounded-border flex flex-col border border-surface items-center gap-4">
-                      <div>
-                        <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
-                      </div>
-                      <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">{{ file.name
-                        }}</span>
-                      <div>{{ formatSize(file.size) }}</div>
-                      <Badge value="Pending" severity="warn" />
-                      <Button icon="pi pi-times" @click="onRemoveTemplatingFile(file, removeFileCallback, index)"
-                        outlined rounded severity="danger" />
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="uploadedFiles.length > 0">
-                  <h5>Completed</h5>
-                  <div class="flex flex-wrap gap-4">
-                    <div v-for="(file, index) of uploadedFiles" :key="file.name + file.type + file.size"
-                      class="p-8 rounded-border flex flex-col border border-surface items-center gap-4">
-                      <div>
-                        <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
-                      </div>
-                      <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">{{ file.name
-                        }}</span>
-                      <div>{{ formatSize(file.size) }}</div>
-                      <Badge value="Completed" class="mt-4" severity="success" />
-                      <Button icon="pi pi-times" @click="removeUploadedFileCallback(index)" outlined rounded
-                        severity="danger" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <template #empty>
-              <div class="flex items-center justify-center flex-col">
-                <i class="pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color" />
-                <p class="mt-6 mb-0">Drag and drop files to here to upload.</p>
-              </div>
-            </template>
-          </FileUpload>
+        <div v-else-if="step == 2" key="step-2">
+          <div class="input-group">
+            <label for="email">Password</label>
+            <Password v-model="password" toggleMask />
+            <span class="error">{{ messagePassword }}</span>
+          </div>
+          <div class="input-group">
+            <label for="confirmPassword">Confirm password</label>
+            <Password v-model="confirmPassword" :feedback="false" toggleMask />
+            <span class="error">{{ messageConfirmPassword }}</span>
+          </div>
 
           <div class="btnTable">
             <button type="button" @click="goToStep(1)" class="back-button buttonDefault">Voltar</button>
+            <button type="button" @click="goToStep(3)" class="register-button buttonDefault">Próxima etapa</button>
+          </div>
+        </div>
+        <!-- Etapa 2: senha e foto -->
+        <div v-else key="step-3" class="preview-step">
+          <!-- Upload de foto -->
+
+          <p>Está em manutenção</p>
+          <div class="btnTable">
+            <button type="button" @click="goToStep(2)" class="back-button buttonDefault">Voltar</button>
             <button type="submit" class="register-button buttonDefault">Cadastrar</button>
           </div>
         </div>
       </form>
-      <span v-if="message.text" :style="{ color: message.color }">{{ message.text }}
+      <span v-if="message.text" :style="{ color: message.color }" class="error">{{ message.text }}
       </span>
     </div>
   </div>
@@ -113,7 +57,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
+import Password from 'primevue/password';
+import InputText from 'primevue/inputtext';
 import FileUpload from 'primevue/fileupload';
+import Image from 'primevue/image';
 
 const step = ref(1)
 
@@ -123,72 +70,85 @@ const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const photo = ref(null);
-const photoPreview = ref(null);
 
-// Váriaveis de mensagem de erro e sucesso
-const messagePassword = ref('');
+// Váriaveis de mensagem de erro
+const message = ref('');
 const messageName = ref('');
+const messageEmail = ref('');
+const messagePassword = ref('');
 const messageConfirmPassword = ref('');
-const message = ref({ text: "", color: "" });
 
-// Váriavel para adicionar o style nas mensagens de erro
-const errorMessage = ref('red');
+// Regex pra email
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Adiciona o router
 const router = useRouter();
 
-// Avançar no passo do form 
-const goToStep = (n) => {
-  if (n === 2 && (!name.value || !email.value)) {
-    message.value = { text: 'Preencha todos os campos.', color: 'red' }
-    return
-  }
-  message.value = { text: '', color: '' }
-  step.value = n
+// Back to login screen 
+const goToLogin = () => {
+  router.replace('/');
 }
 
-const register = async () => {
-  // Aqui zero o valor das mensagens de erro após cada tentativa de registro
+// Avançar no passo do form 
+const goToStep = (n) => {
+  messageEmail.value = '';
   messagePassword.value = '';
   messageName.value = '';
   messageConfirmPassword.value = '';
 
-  console.log({ name: name.value, email: email.value, password: password.value });
-  // Validação da senha se é menor que 6 caracteres
-  if (password.value.length < 6) {
-    messagePassword.value = "A senha deve ter no mínimo 6 caracteres.";
-    return;
-  }
-  // Validação do nome se é menor que 3 caracteres
-  if (name.value.length < 3) {
-    messageName.value = "O nome deve ter no mínimo 3 caracteres.";
-    return;
-  }
-  // Validação da senha se é diferente da senha digitada na confirmação
-  if (password.value !== confirmPassword.value) {
-    messagePassword.value = "As senhas não coincidem.";
-    messageConfirmPassword.value = "As senhas não coincidem.";
-    return;
-  } else { // Caso passe todas as validações segue o registro para a API
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/create`, {
-        name: name.value,
-        email: email.value,
-        password: password.value,
-        img: photo.value
-      });
-
-      message.value = { text: response.data.message, color: "green" };
-      setTimeout(() => {
-        router.replace('/');
-      }, 2000);
-    } catch (error) {
-      console.error("Erro ao registrar:", error.response || error);
-      message.value = { text: error.response.data.message, color: "red" }
+  if (step.value === 1 && n === 2) {
+    if (!name.value.trim()) {
+      messageName.value = 'O nome é obrigatório.'
+      return
     }
 
-  };
+    if (!email.value.trim()) {
+      messageEmail.value = 'O e-mail é obrigatório.'
+      return
+    }
+
+    if (!emailRegex.test(email.value)) {
+      messageEmail.value = 'Formato de e-mail inválido.'
+      return
+    }
+
+    step.value = n
+  }
+
+  if (step.value === 2 && n === 3) {
+    if (password.value.length < 6) {
+      messagePassword.value = 'A senha deve mais de 5 caracteres.'
+      return
+    }
+
+    if (password.value !== confirmPassword.value) {
+      messageConfirmPassword.value = 'As senhas não coincidem.'
+      return
+    }
+    step.value = n
+  }
+
+  step.value = n;
 }
+
+const register = async () => {
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/create`, {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
+
+    message.value = { text: response.data.message, color: "#22c55e" };
+    setTimeout(() => {
+      router.replace('/');
+    }, 2000);
+  } catch (error) {
+    message.value = { text: error.response.data.message, color: "#e74c3c" }
+  }
+
+};
+
 </script>
 
 <style scoped>
@@ -253,7 +213,7 @@ const register = async () => {
 .register-button {
   width: 100%;
   padding: 10px;
-  background: #555;
+  background: #20C997;
   border: none;
   border-radius: 4px;
   color: #fff;
@@ -263,7 +223,7 @@ const register = async () => {
 }
 
 .register-button:hover {
-  background: #777;
+  background: #17a589;
   transform: scale(1.05);
 }
 
@@ -283,5 +243,43 @@ span {
 
 .back-button {
   width: 100%;
+}
+
+.back-to-login-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.back-to-login-btn:hover {
+  color: #000;
+}
+
+.step-indicator {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: background-image 0.3s ease;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: block;
+  font-weight: 600;
 }
 </style>
