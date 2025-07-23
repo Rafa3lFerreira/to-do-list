@@ -4,13 +4,16 @@
       <div class="card flex justify-center">
         <ToggleSwitch v-model="checked" @change="toggleDarkMode" />
       </div>
-      <div class="profile-pic"></div>
+      <div class="profile-pic">
+        <img :src="`https://ui-avatars.com/api/?name=${getUsuario()}&background=20C997&color=fff`" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { getUsuario } from '../main'
 import ToggleSwitch from 'primevue/toggleswitch'
 
 const checked = ref(false)
@@ -56,7 +59,15 @@ onMounted(() => {
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
-  background-color: red;
+  overflow: hidden;
+  border: 1.8px solid #fff;
+}
+
+.profile-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .navbar a:hover {

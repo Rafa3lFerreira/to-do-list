@@ -152,16 +152,6 @@ const register = async () => {
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .register-container {
   display: flex;
   align-items: center;
@@ -182,7 +172,7 @@ const register = async () => {
 }
 
 .register-box h2 {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #555;
 }
 
@@ -196,18 +186,6 @@ const register = async () => {
 .input-group label {
   margin-bottom: 5px;
   color: #555;
-}
-
-.input-group input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  outline: none;
-  transition: border 0.3s ease;
-}
-
-.input-group input:focus {
-  border-color: #777;
 }
 
 .register-button {
@@ -229,11 +207,6 @@ const register = async () => {
 
 span {
   font-size: 10px;
-}
-
-.photo-preview {
-  display: flex;
-  justify-content: center;
 }
 
 .btnTable {
@@ -261,18 +234,8 @@ span {
 
 .step-indicator {
   font-size: 14px;
-  color: #777;
+  color: #555;
   text-align: center;
-}
-
-.profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  cursor: pointer;
-  transition: background-image 0.3s ease;
 }
 
 .error {
