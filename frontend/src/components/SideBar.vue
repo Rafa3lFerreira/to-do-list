@@ -7,11 +7,13 @@
         {{ isCollapsed ? '☰' : '☰' }}
       </button>
     </div>
-    
+
     <div class="sidebar-content" v-if="!isCollapsed">
       <RouterLink to="/home" class="item"><i class="pi pi-home gapIcon" style="font-size: 1rem"></i>Home</RouterLink>
-      <RouterLink to="/crud" class="item"><i class="pi pi-list-check gapIcon" style="font-size: 1rem"></i>Lists</RouterLink>
-      <RouterLink to="/admin" class="item" v-if="getRole() === 'admin'"><i class="pi pi-user gapIcon" style="font-size: 1rem"></i>Admin Area</RouterLink>
+      <RouterLink to="/crud" class="item"><i class="pi pi-list-check gapIcon" style="font-size: 1rem"></i>Lists
+      </RouterLink>
+      <RouterLink to="/admin" class="item" v-if="getRole() === 'admin'"><i class="pi pi-user gapIcon"
+          style="font-size: 1rem"></i>Admin Area</RouterLink>
     </div>
   </div>
 
@@ -29,7 +31,7 @@ const isCollapsed = ref(false);
 <style scoped>
 .sidebar {
   width: 200px;
-  background-color: var(--body-bg);
+  background-color: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
   padding-top: 80px;
@@ -63,8 +65,8 @@ const isCollapsed = ref(false);
   font-size: 20px;
   cursor: pointer;
   width: 100%;
-  text-align: center;
-  padding: 10px 0;
+  text-align: left;
+  padding: 15px 20px;
 }
 
 .sidebar-content {
@@ -94,4 +96,5 @@ const isCollapsed = ref(false);
 .gapIcon {
   margin-right: 10px;
 }
+
 </style>

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <h1>{{ saudacao }}, {{ getUsuario() }}</h1>
+        <h4>{{ saudacao }}, {{ getUsuario() }}</h4>
+        <h5> {{ getDate() }}</h5>
         <hr>
         
     </div>
@@ -24,6 +25,15 @@ const saudacao = computed(() => {
         return 'Boa noite';
     }
 });
+
+const getDate = () => {
+    const date = new Date();
+    return date.toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+    });
+};
 </script>
 
 <style scoped>

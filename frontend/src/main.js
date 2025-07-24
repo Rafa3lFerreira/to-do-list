@@ -9,18 +9,6 @@ import Toast from 'primevue/toast'
 import axios from "axios";
 import 'primeicons/primeicons.css'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-
-/* import font awesome icon component */
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-/* import specific icons */
-import { faCopy, faEdit, faHome, faList, faMagnifyingGlass, faPlus, faTrash, faUser, faUserTie } from '@fortawesome/free-solid-svg-icons'
-
-
-/* add icons to the library */
-library.add(faHome, faUser, faList, faUserTie, faEdit, faTrash, faPlus, faMagnifyingGlass, faCopy)
-
 export function getUsuario() {
     return localStorage.getItem("usuario") || "Usuário";
 }
@@ -48,7 +36,6 @@ export async function sendLog(message, level, details = {}) {
 
 createApp(App)
     .component('Toast', Toast)
-    .component('font-awesome-icon', FontAwesomeIcon)
     .use(router)
     .use(PrimeVue, { theme: { preset: Aura } })
     .use(ToastService)
