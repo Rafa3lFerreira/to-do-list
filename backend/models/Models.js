@@ -45,6 +45,22 @@ const listSchema = new mongoose.Schema({
     }
 });
 
+const taskSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    created_by: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['PENDING', 'IN_PROGRESS', 'COMPLETED'],
+        default: 'PENDING'
+    }
+})
+
 const logSchema = new mongoose.Schema({
     message: {
         type: String,
@@ -70,6 +86,8 @@ const User = mongoose.model('User', userSchema);
 
 const List = mongoose.model('List', listSchema);
 
+const Task = mongoose.model('Task', taskSchema);
+
 const Log = mongoose.model('Log', logSchema);
 
-export default { User, List, Log };
+export default { User, List, Task, Log };

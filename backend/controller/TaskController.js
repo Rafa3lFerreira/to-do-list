@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Models from "../models/Models.js";
 
-const { User, List, Log } = Models;
+const { User, List, Task, Log } = Models;
 
 export async function createUser(req, res) {
     const { name, email, password, role, img } = req.body;
@@ -111,10 +111,12 @@ export async function deleteList(req, res) {
 }
 
 export async function createTask(req, res) {
-    const { idList, arrayTask } = req.body;
+    const { name, created_by } = req.body;
+
     try {
-        const result = await List.updateOne({ _id: idList }, { tasks: arrayTask })
-        console.log(result);
+        const newTask = new Task({ name, created_by});
+        await newTask.save();
+
         res.status(201).json({ message: "Task cadastrada com sucesso!" })
     } catch (error) {
         res.status(400).json({ message: "Erro ao cadastrar a task", error })

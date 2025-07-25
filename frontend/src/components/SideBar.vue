@@ -1,6 +1,4 @@
 <template>
-  <div class="white-space"></div>
-
   <div class="sidebar" :class="{ collapsed: isCollapsed }">
     <div class="sidebar-header">
       <button class="toggle-btn" @click="isCollapsed = !isCollapsed">
@@ -10,10 +8,8 @@
 
     <div class="sidebar-content" v-if="!isCollapsed">
       <RouterLink to="/home" class="item"><i class="pi pi-home gapIcon" style="font-size: 1rem"></i>Home</RouterLink>
-      <RouterLink to="/crud" class="item"><i class="pi pi-list-check gapIcon" style="font-size: 1rem"></i>Lists
-      </RouterLink>
-      <RouterLink to="/admin" class="item" v-if="getRole() === 'admin'"><i class="pi pi-user gapIcon"
-          style="font-size: 1rem"></i>Admin Area</RouterLink>
+      <RouterLink to="/crud" class="item"><i class="pi pi-list-check gapIcon" style="font-size: 1rem"></i>Lists</RouterLink>
+      <RouterLink to="/admin" class="item" v-if="getRole() === 'admin'"><i class="pi pi-user gapIcon" style="font-size: 1rem"></i>Admin Area</RouterLink>
     </div>
   </div>
 
@@ -30,11 +26,11 @@ const isCollapsed = ref(false);
 
 <style scoped>
 .sidebar {
-  width: 200px;
+  width: 250px;
   background-color: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
-  padding-top: 80px;
+  padding-top: 45px;
   transition: all 0.3s ease;
   box-sizing: border-box;
   overflow: hidden;

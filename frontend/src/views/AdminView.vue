@@ -43,7 +43,7 @@
                     </div>
                     <div class="logButton">
                         <button class="buttonDefault" @click="copyText(userLog)">
-                            <font-awesome-icon :icon="['fas', 'copy']" />
+                            <i class="pi pi-clone"></i>
                         </button>
                     </div>
                 </div>
