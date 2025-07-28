@@ -14,12 +14,9 @@
             <h4 class="title-text">Today Tasks</h4>
             <hr>
             <template v-for="(listTask, index) in listTasks" :key="index">
-                <div>
-                    <div>
-                        <div>
-                            <p> {{ listTask.name }}</p>
-                        </div>
-                    </div>
+                <div class="list-task">
+                    <p> {{ listTask.name }}</p>
+                    <Button icon="pi pi-pencil"/> 
                 </div>
             </template>
             <p v-if="listTasks.length == 0">No tasks for today.</p>
@@ -36,6 +33,7 @@ import axios from 'axios';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
+
 
 const task = ref('');
 const toast = useToast();
@@ -80,6 +78,7 @@ const addList = async () => {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/list/taskCreate`, { name: task.value, created_by: getUser() })
 
         task.value = '';
+        listTodayTask();
 
         toast.add({
             severity: 'success',
@@ -160,11 +159,19 @@ const listTodayTask = async () => {
 }
 
 .todaylist-block p {
-    padding: 10px;
     color: var(--text-color);
 }
 
 .todaylist-block hr {
     margin: 6px
+}
+
+.list-task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-left: 10px;
+    padding-right: 10px;
 }
 </style>
