@@ -13,7 +13,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getUsuario } from '../main'
+import { getUser } from '../main'
 import ToggleSwitch from 'primevue/toggleswitch'
 
 const checked = ref(false)
@@ -27,7 +27,7 @@ const avatarUrl = () => {
   const isDark = document.documentElement.classList.contains('dark');
   const bgColor = isDark ? '0E5C4E' : '20C997';
   const textColor = 'fff';
-  return `https://ui-avatars.com/api/?name=${getUsuario()}&background=${bgColor}&color=${textColor}`;
+  return `https://ui-avatars.com/api/?name=${getUser()}&background=${bgColor}&color=${textColor}`;
 }
 
 onMounted(() => {

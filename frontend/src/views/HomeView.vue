@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="title-text"><i :class="iconeSaudacao" class=""></i>{{ saudacao }}, {{ getUsuario() }}</h4>
+        <h4 class="title-text"><i :class="greetingIcon" class=""></i>{{ greeting }}, {{ getUser() }}</h4>
         <h4> {{ getDate() }}</h4>
         <hr>
 
@@ -10,13 +10,26 @@
             <Button label="Create" icon="pi pi-plus" @click="addList()" />
         </div>
 
-
+        <div class="todaylist-block">
+            <h4 class="title-text">Today Tasks</h4>
+            <hr>
+            <template v-for="(listTask, index) in listTasks" :key="index">
+                <div>
+                    <div>
+                        <div>
+                            <p> {{ listTask.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <p v-if="listTasks.length == 0">No tasks for today.</p>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { getUsuario } from '../main';
-import { computed, ref } from 'vue';
+import { getUser } from '../main';
+import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 
 // imports do primevue
@@ -27,22 +40,28 @@ import { useToast } from 'primevue/usetoast';
 const task = ref('');
 const toast = useToast();
 
-const saudacao = computed(() => {
-    const dateTime = new Date();
-    const horas = dateTime.toLocaleTimeString('pt-BR');
+const listTasks = ref([]);
 
-    if (horas < '06:00:00') { // antes de 6:30
+onMounted(() => {
+    listTodayTask();
+});
+
+const greeting = computed(() => {
+    const dateTime = new Date();
+    const hours = dateTime.toLocaleTimeString('pt-BR');
+
+    if (hours < '06:00:00') { // antes de 6:30
         return 'Boa noite';
-    } else if (horas < '12:00:00') { // antes de 12:00
+    } else if (hours < '12:00:00') { // antes de 12:00
         return 'Bom dia';
-    } else if (horas < '18:00:00') { // antes de 18:00
+    } else if (hours < '18:00:00') { // antes de 18:00
         return 'Boa tarde';
     } else {
         return 'Boa noite';
     }
 });
 
-const iconeSaudacao = computed(() => {
+const greetingIcon = computed(() => {
     const horaAtual = new Date().getHours()
     return horaAtual >= 6 && horaAtual < 18 ? 'pi pi-sun gapIcon' : 'pi pi-moon gapIcon'
 })
@@ -57,13 +76,11 @@ const getDate = () => {
 };
 
 const addList = async () => {
-    console.log("Add list function", task.value)
-
     try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/list/taskCreate`, {name: task.value, created_by: getUsuario()})
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/list/taskCreate`, { name: task.value, created_by: getUser() })
 
         task.value = '';
-        
+
         toast.add({
             severity: 'success',
             summary: 'Success',
@@ -78,6 +95,18 @@ const addList = async () => {
             detail: error,
             life: 3000
         });
+    }
+}
+
+const listTodayTask = async () => {
+    try {
+        const date = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/list/todayTask`, { params: { date } });
+        listTasks.value = response.data;
+        console.log(listTasks.value);
+    } catch (error) {
+
     }
 }
 </script>
@@ -116,5 +145,26 @@ const addList = async () => {
     margin: 5px 10px 0px 0px;
     background-color: var(--navbar-bg);
     border-color: none;
+}
+
+.todaylist-block {
+    width: 100%;
+    background-color: var(--sidebar-bg);
+    box-shadow: var(--sidebar-box-shadow);
+    border-radius: 10px;
+}
+
+.todaylist-block .title-text {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.todaylist-block p {
+    padding: 10px;
+    color: var(--text-color);
+}
+
+.todaylist-block hr {
+    margin: 6px
 }
 </style>

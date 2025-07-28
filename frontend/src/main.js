@@ -9,7 +9,7 @@ import Toast from 'primevue/toast'
 import axios from "axios";
 import 'primeicons/primeicons.css'
 
-export function getUsuario() {
+export function getUser() {
     return localStorage.getItem("usuario") || "Usuário";
 }
 

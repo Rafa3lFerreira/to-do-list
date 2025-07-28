@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, loginUser, listUser, listUserById, createList, allList, createTask, deleteList, deleteUser, createLog, searchLog } from "../controller/TaskController.js";
+import { createUser, loginUser, listUser, listUserById, createList, allList, createTask, listTodayTask, deleteList, deleteUser, createLog, searchLog } from "../controller/TaskController.js";
 import cors from 'cors';
 
 const routes = (app) => {
@@ -18,6 +18,7 @@ const routes = (app) => {
     app.post("/list/create", createList);
     app.get("/list/allLists", allList);
     app.post("/list/taskCreate", createTask);
+    app.get("/list/todayTask", listTodayTask)
     app.delete("/list/delete", deleteList);
 
     // Logs route

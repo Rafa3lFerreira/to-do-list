@@ -67,7 +67,7 @@ export async function listUser(req, res) {
 export async function listUserById(req, res) {
     try {
         id = req.params.id;
-        const users = await User.find({_id: id}).select("id name email role");
+        const users = await User.find({ _id: id }).select("id name email role");
         console.log(users);
         res.status(200).json(users);
     }
@@ -114,12 +114,33 @@ export async function createTask(req, res) {
     const { name, created_by } = req.body;
 
     try {
-        const newTask = new Task({ name, created_by});
+        const newTask = new Task({ name, created_by });
         await newTask.save();
 
         res.status(201).json({ message: "Task cadastrada com sucesso!" })
     } catch (error) {
         res.status(400).json({ message: "Erro ao cadastrar a task", error })
+    }
+}
+
+export async function listTodayTask(req, res) {
+    try {
+        const { date } = req.query;
+
+        const startOfDay = new Date(`${date}T00:00:00`);
+        const endOfDay = new Date(`${date}T23:59:59`);
+
+        const tasks = await Task.find({
+            created_at: {
+                $gte: startOfDay,
+                $lt: endOfDay
+            }
+        });
+
+        res.status(200).json(tasks);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao buscar tarefas de hoje' });
     }
 }
 
