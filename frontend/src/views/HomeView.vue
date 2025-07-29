@@ -16,12 +16,23 @@
             <template v-for="(listTask, index) in listTasks" :key="index">
                 <div class="list-task">
                     <p> {{ listTask.name }}</p>
-                    <Button icon="pi pi-pencil"/> 
+                    <Button icon="pi pi-pencil" @click="showTask = true" />
+
+
                 </div>
             </template>
             <p v-if="listTasks.length == 0">No tasks for today.</p>
         </div>
     </div>
+    <Dialog v-model:visible="showTask" modal header="Edit task" :style="{ width: '45rem' }">
+        <div class="edit-task">
+
+            <div class="bar-task">
+                <Select v-model="selectedStatus" :options="status" optionLabel="name" placeholder="Select a status"
+                    class="w-full md:w-56" />
+            </div>
+        </div>
+    </Dialog>
 </template>
 
 <script setup>
@@ -33,12 +44,17 @@ import axios from 'axios';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
-
+import Dialog from 'primevue/dialog';
+import Select from 'primevue/select';
 
 const task = ref('');
 const toast = useToast();
 
 const listTasks = ref([]);
+
+const status = ref([]);
+
+const showTask = ref(false);
 
 onMounted(() => {
     listTodayTask();
@@ -151,6 +167,7 @@ const listTodayTask = async () => {
     background-color: var(--sidebar-bg);
     box-shadow: var(--sidebar-box-shadow);
     border-radius: 10px;
+    padding-bottom: 5px;
 }
 
 .todaylist-block .title-text {
@@ -160,6 +177,7 @@ const listTodayTask = async () => {
 
 .todaylist-block p {
     color: var(--text-color);
+    padding-left: 10px;
 }
 
 .todaylist-block hr {
@@ -170,8 +188,25 @@ const listTodayTask = async () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding-left: 10px;
     padding-right: 10px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.edit-task{
+    display: flex;
+}
+
+.bar-task {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: right;
+    width: 50px;
+    overflow: hidden;
 }
 </style>
