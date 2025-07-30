@@ -14,10 +14,12 @@
             <h4 class="title-text">Today Tasks</h4>
             <hr>
             <template v-for="(listTask, index) in listTasks" :key="index">
-                <div class="list-task">
-                    <input type="checkbox" @change="updateStatus(listTask._id)" :checked="listTask.status === 'COMPLETED'" />
+                <label class="list-task circle-check">
+                    <input type="checkbox" @change="updateStatus(listTask._id)"
+                        :checked="listTask.status === 'COMPLETED'" />
+                    <span class="checkmark"></span>
                     <p> {{ listTask.name }}</p>
-                </div>
+                </label>
             </template>
             <p v-if="listTasks.length == 0">No tasks for today.</p>
         </div>
@@ -33,7 +35,6 @@ import axios from 'axios';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
-import Checkbox from 'primevue/checkbox';
 
 const task = ref('');
 const toast = useToast();
@@ -202,4 +203,26 @@ const updateStatus = async (taskId) => {
     margin-right: 6px;
     margin-bottom: 6px;
 }
+
+.list-task input[type="checkbox"] {
+    display: none;
+}
+
+.list-task .checkmark {
+    height: 20px;
+    width: 20px;
+    border: 2px solid var(--checkbox-border-color);
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.list-task input:checked+.checkmark {
+    background-color: var(--navbar-bg);
+}
+
+
 </style>
