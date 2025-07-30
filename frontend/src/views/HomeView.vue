@@ -14,12 +14,16 @@
             <h4 class="title-text">Today Tasks</h4>
             <hr>
             <template v-for="(listTask, index) in listTasks" :key="index">
-                <label class="list-task circle-check">
-                    <input type="checkbox" @change="updateStatus(listTask._id)"
-                        :checked="listTask.status === 'COMPLETED'" />
-                    <span class="checkmark"></span>
-                    <p> {{ listTask.name }}</p>
-                </label>
+                <div class="list-task">
+                    <label class="circle-check">
+                        <input type="checkbox" @change="updateStatus(listTask._id)"
+                            :checked="listTask.status === 'COMPLETED'" />
+                        <span class="checkmark">
+                            <i class="pi pi-check"></i>
+                        </span>
+                    </label>
+                    <p>{{ listTask.name }}</p>
+                </div>
             </template>
             <p v-if="listTasks.length == 0">No tasks for today.</p>
         </div>
@@ -139,10 +143,6 @@ const updateStatus = async (taskId) => {
     margin-right: 5px;
 }
 
-.title-text {
-    padding-top: 10px;
-}
-
 .dayList-block {
     width: 100%;
     background-color: var(--sidebar-bg);
@@ -197,11 +197,8 @@ const updateStatus = async (taskId) => {
     align-items: center;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-left: 6px;
-    margin-right: 6px;
-    margin-bottom: 6px;
+    padding: 10px;
+    margin: 6px;
 }
 
 .list-task input[type="checkbox"] {
@@ -211,18 +208,21 @@ const updateStatus = async (taskId) => {
 .list-task .checkmark {
     height: 20px;
     width: 20px;
-    border: 2px solid var(--checkbox-border-color);
+    border: 1px solid var(--checkbox-border-color);
     border-radius: 50%;
-    margin-right: 10px;
-    display: inline-block;
-    position: relative;
-    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    font-size: 14px;
 }
 
-.list-task input:checked+.checkmark {
-    background-color: var(--navbar-bg);
+.list-task .checkmark .pi-check {
+    display: none;
+    color: var(--checkbox-check);
 }
 
-
+.list-task input[type="checkbox"]:checked+.checkmark .pi-check {
+    display: block;
+}
 </style>

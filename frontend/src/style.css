@@ -23,6 +23,7 @@
   --sidebar-toggle-btn: #222222;
   --icon-border: 1.8px solid #ffffff;
   --checkbox-border-color: black;
+  --checkbox-check: #20C997;
 }
 
 .dark {
@@ -36,7 +37,8 @@
   --sidebar-box-shadow: 0 0 2.5px 0px white;
   --sidebar-toggle-btn: #dddddd;
   --icon-border: 1.8px solid #000000;
-  --checkbox-border-color: #dddddd;
+  --checkbox-border-color: #e0e0e0;
+  --checkbox-check: white;
 }
 
 .buttonDefault {

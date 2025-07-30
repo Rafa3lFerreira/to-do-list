@@ -38,7 +38,6 @@ const isCollapsed = ref(false);
   top: 0;
   left: 0;
   height: 100vh;
-  transition: background-color 0.3s, color 0.3s;
 }
 
 .sidebar.collapsed {
