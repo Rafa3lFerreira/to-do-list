@@ -15,24 +15,13 @@
             <hr>
             <template v-for="(listTask, index) in listTasks" :key="index">
                 <div class="list-task">
+                    <input type="checkbox" @change="updateStatus(listTask._id)" :checked="listTask.status === 'COMPLETED'" />
                     <p> {{ listTask.name }}</p>
-                    <Button icon="pi pi-pencil" @click="showTask = true" />
-
-
                 </div>
             </template>
             <p v-if="listTasks.length == 0">No tasks for today.</p>
         </div>
     </div>
-    <Dialog v-model:visible="showTask" modal header="Edit task" :style="{ width: '45rem' }">
-        <div class="edit-task">
-
-            <div class="bar-task">
-                <Select v-model="selectedStatus" :options="status" optionLabel="name" placeholder="Select a status"
-                    class="w-full md:w-56" />
-            </div>
-        </div>
-    </Dialog>
 </template>
 
 <script setup>
@@ -44,17 +33,13 @@ import axios from 'axios';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
-import Dialog from 'primevue/dialog';
-import Select from 'primevue/select';
+import Checkbox from 'primevue/checkbox';
 
 const task = ref('');
 const toast = useToast();
 
 const listTasks = ref([]);
 
-const status = ref([]);
-
-const showTask = ref(false);
 
 onMounted(() => {
     listTodayTask();
@@ -119,9 +104,31 @@ const listTodayTask = async () => {
 
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/list/todayTask`, { params: { date } });
         listTasks.value = response.data;
-        console.log(listTasks.value);
     } catch (error) {
 
+    }
+}
+
+const updateStatus = async (taskId) => {
+    try {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/list/updateTask`, { id: taskId });
+
+        if (response) {
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Task status updated successfully',
+                life: 3000
+            });
+            listTodayTask();
+        }
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update task status',
+            life: 3000
+        });
     }
 }
 </script>
@@ -186,7 +193,6 @@ const listTodayTask = async () => {
 
 .list-task {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -195,18 +201,5 @@ const listTodayTask = async () => {
     margin-left: 6px;
     margin-right: 6px;
     margin-bottom: 6px;
-}
-
-.edit-task{
-    display: flex;
-}
-
-.bar-task {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: right;
-    width: 50px;
-    overflow: hidden;
 }
 </style>

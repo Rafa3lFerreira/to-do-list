@@ -144,6 +144,25 @@ export async function listTodayTask(req, res) {
     }
 }
 
+export async function updateTask(req, res) {
+    try {
+        const id = req.body.id;
+        const findTask = await Task.findById(id);
+        
+        if (!findTask) {
+            return res.status(404).json({ message: "Task não encontrada" });
+        }
+
+        const newStatus = findTask.status === "COMPLETED" ? "PENDING" : "COMPLETED";
+
+        const updatedTask = await Task.findByIdAndUpdate(id, { status: newStatus }, { new: true });
+
+        res.status(200).json(updatedTask);
+    } catch (error) {
+        res.status(400).json({ message: "Erro ao atualizar a task", error });
+    }
+}
+
 export async function deleteUser(req, res) {
     try {
         const id = req.query.id;
