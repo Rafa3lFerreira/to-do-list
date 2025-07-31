@@ -26,7 +26,7 @@
             </Transition>
             <!-- Item 2 -->
             <div @click="toggle(2)" class="item-header">
-                <i class="pi pi-angle-right" v-if="openItem = 2" ></i>
+                <i class="pi pi-angle-right"></i>
                 Today List
             </div>
             <Transition name="fade">
