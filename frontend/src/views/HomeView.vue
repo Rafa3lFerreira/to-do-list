@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { getUser } from '../main';
+import { getUser, sendLog } from '../main';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 
@@ -83,6 +83,14 @@ const addList = async () => {
     try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/list/taskCreate`, { name: task.value, created_by: getUser() })
 
+        const details = {
+            user_id: getUser(),
+            action: "create",
+            task_created: task.value,
+            ip: "não implementado"
+        };
+
+        sendLog('Task criada com sucesso', 'INFO', details)
         task.value = '';
         listTodayTask();
 
@@ -93,7 +101,15 @@ const addList = async () => {
             life: 3000
         });
     } catch (error) {
-        console.log(error)
+        const details = {
+            user_id: getUser(),
+            action: "create",
+            task_created: task.value,
+            ip: "não implementado"
+        };
+
+        sendLog('Erro ao criar a task', 'ERRO', details)
+
         toast.add({
             severity: 'Error',
             summary: 'Error',
@@ -109,6 +125,7 @@ const listTodayTask = async () => {
 
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/list/getTask`, { params: { date } });
         listTasks.value = response.data;
+
     } catch (error) {
 
     }
