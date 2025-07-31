@@ -59,7 +59,6 @@ import Dialog from 'primevue/dialog';
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
-import Swal from 'sweetalert2';
 import { useToast } from 'primevue/usetoast'
 
 import { sendLog, getIdUser } from '../main';
@@ -88,46 +87,35 @@ const registerNew = async () => {
 }
 
 const excluirUsuario = async (id) => {
-    const alert = await Swal.fire({
-        title: "Deseja excluir este usuário?",
-        text: "Não é possível reverter essa ação!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sim!",
-        cancelButtonText: "Não!"
-    }); if (alert.isConfirmed) {
-        try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/user/delete/`, { params: { id: id } });
+    try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/user/delete/`, { params: { id: id } });
 
-            const details = {
-                user_id: getIdUser(),
-                action: "delete",
-                deleted_user: id,
-                ip: "não implementado"
-            };
+        const details = {
+            user_id: getIdUser(),
+            action: "delete",
+            deleted_user: id,
+            ip: "não implementado"
+        };
 
-            sendLog('User delete', 'INFO', details);
+        sendLog('User delete', 'INFO', details);
 
-            toast.add({
-                severity: 'success',
-                summary: 'Usuário excluído',
-                detail: 'O usuário foi removido com sucesso!',
-                life: 3000
-            });
-            await listUsers();
+        toast.add({
+            severity: 'success',
+            summary: 'Usuário excluído',
+            detail: 'O usuário foi removido com sucesso!',
+            life: 3000
+        });
+        await listUsers();
 
-        } catch (error) {
-            toast.add({
-                severity: 'error',
-                summary: 'Erro ao excluir',
-                detail: 'Erro ao excluir usuário: ' + (error.response?.data?.message || error.message),
-                life: 5000
-            });
-        }
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: 'Erro ao excluir',
+            detail: 'Erro ao excluir usuário: ' + (error.response?.data?.message || error.message),
+            life: 5000
+        });
     }
-};
+}
 
 const listLogByUser = async (id) => {
     visible.value = true;
