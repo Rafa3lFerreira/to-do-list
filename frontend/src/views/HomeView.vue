@@ -107,7 +107,7 @@ const listTodayTask = async () => {
     try {
         const date = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/list/todayTask`, { params: { date } });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/list/getTask`, { params: { date } });
         listTasks.value = response.data;
     } catch (error) {
 

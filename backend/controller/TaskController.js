@@ -123,7 +123,7 @@ export async function createTask(req, res) {
     }
 }
 
-export async function listTodayTask(req, res) {
+export async function getTasks(req, res) {
     try {
         const { date } = req.query;
 
