@@ -17,7 +17,7 @@ export default {
     components: { sideBar, NavBar },
     computed: {
         isLoginOrRegister() {
-            return this.$route.fullPath == '/' || this.$route.fullPath == '/register';
+            return this.$route.fullPath == '/' || this.$route.fullPath == '/register' || this.$route.fullPath == '/login'
         }
     }
 }

@@ -8,7 +8,7 @@
 
     <div class="sidebar-content" v-if="!isCollapsed">
       <RouterLink to="/home" class="item"><i class="pi pi-home gapIcon" style="font-size: 1rem"></i>Home</RouterLink>
-      <RouterLink to="/crud" class="item"><i class="pi pi-list-check gapIcon" style="font-size: 1rem"></i>Lists</RouterLink>
+      <RouterLink to="/list" class="item"><i class="pi pi-list-check gapIcon" style="font-size: 1rem"></i>Lists</RouterLink>
       <RouterLink to="/admin" class="item" v-if="getRole() === 'admin'"><i class="pi pi-user gapIcon" style="font-size: 1rem"></i>Admin Area</RouterLink>
     </div>
   </div>

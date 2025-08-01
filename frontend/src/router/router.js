@@ -5,12 +5,14 @@ import RegisterView from '../views/RegisterView.vue';
 import HomeView from '../views/HomeView.vue';
 import AdminView from '../views/AdminView.vue';
 import ListView from '../views/ListView.vue';
+import LandingView from '../views/LandingView.vue';
 
 const routes = [
-  { path: '/', component: LoginView },
-  { path: '/home', component: HomeView },
+  { path: '/', component: LandingView },
+  { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
-  { path: '/crud', component: ListView },
+  { path: '/home', component: HomeView },
+  { path: '/list', component: ListView },
   {
     path: '/admin', component: AdminView, meta: { requiresAuth: true, role: "admin" }
   },
